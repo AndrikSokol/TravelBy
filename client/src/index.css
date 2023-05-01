@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+input[type="email"],
+input[type="password"],
+input[type="username"] {
+  @apply w-full  outline-none hover:scale-x-[1.02] focus:scale-x-[1.02] transition-transform;
+}
+input[type="text"] {
+  @apply w-full px-2 outline-none;
+}
+
+.MyInput {
+  @apply w-full outline-none flex border rounded-2xl my-2 py-2 px-2 gap-2;
+}
+
+textarea {
+  @apply w-full outline-none border my-1 py-2 px-3 rounded-2xl;
+}
+
+.MyLabel {
+  @apply border p-4 flex rounded-2xl gap-2 items-center cursor-pointer;
+}
