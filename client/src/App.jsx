@@ -1,11 +1,11 @@
 import { Route, Routes } from "react-router";
-import Layout from "./Layout";
+import Layout from "./components/Layout";
 import "./App.css";
 import LoginPage from "./pages/LoginPage";
 import IndexPage from "./pages/IndexPage";
 import RegisterPage from "./pages/RegisterPage";
 import axios from "axios";
-import { UserContextProvider } from "./UserContext";
+import { UserContextProvider } from "./context/UserContext";
 import AccountPage from "./pages/AccountPage";
 
 axios.defaults.baseURL = "http://localhost:4500";
