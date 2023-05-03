@@ -58,7 +58,7 @@ const PlacesFormPage = () => {
   return (
     <div>
       <AccountNav />
-      <form className="w-[80%] lg:w-[60%] mx-auto">
+      <form className="w-[80%] lg:w-[60%] mx-auto" onSubmit={addedNewPlaces}>
         <h2 className="text-2xl lg:text-3xl mt-4">Title</h2>
         <p className="text-gray-500 text-sm">
           title for your place/ Should be short and catchy as in advertisment
@@ -133,7 +133,7 @@ const PlacesFormPage = () => {
           </div>
         </div>
         <div className="my-4">
-          <button className="w-[200px] hover:opacity-90 active:opacity-95 w-full bg-primary rounded-2xl py-2 text-white font-bold ">
+          <button className="w-[200px] hover:opacity-90 active:opacity-95  bg-primary rounded-2xl py-2 text-white font-bold ">
             Save
           </button>
         </div>

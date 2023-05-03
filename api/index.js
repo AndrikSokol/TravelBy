@@ -137,7 +137,7 @@ app.post("/places", async (req, res) => {
     maxGuests,
   } = req.body;
   jwt.verify(token, jwtSecret, {}, async (error, userData) => {
-    if (err) throw error;
+    if (error) throw error;
     const placeDoc = await Place.create({
       owner: userData.id,
       title,
@@ -151,6 +151,21 @@ app.post("/places", async (req, res) => {
       maxGuests,
     });
     res.json(placeDoc);
+  });
+});
+
+app.get("/places", async (req, res) => {
+  const { token } = req.cookies;
+  jwt.verify(token, jwtSecret, {}, async (error, userData) => {
+    if (error) {
+      return res.status(404).json();
+    }
+    console.log(userData);
+    const places = await Place.find({
+      owner: new mongoose.Types.ObjectId(userData.id),
+    });
+    console.log(places);
+    res.json(places);
   });
 });
 

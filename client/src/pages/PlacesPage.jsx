@@ -2,11 +2,12 @@ import React from "react";
 import { Link, useParams } from "react-router-dom";
 import PlacesFormPage from "../components/PlacesFormPage";
 import AccountNav from "../components/AccountNav";
+import axios from "axios";
 
 const PlacesPage = () => {
   React.useEffect(() => {
     async function fetchData() {
-      await axios.get("/places");
+      const { data } = await axios.get("/places");
     }
     fetchData();
   }, []);
