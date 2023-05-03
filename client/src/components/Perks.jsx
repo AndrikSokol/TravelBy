@@ -12,7 +12,7 @@ const Perks = ({ selected, onChange }) => {
 
   return (
     <>
-      <h2 className="text-2xl mt-4">Perks</h2>
+      <h2 className="text-2xl lg:text-3xl mt-4">Perks</h2>
       <p className="text-gray-500 text-sm">
         select all the perks of your place
       </p>

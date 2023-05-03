@@ -1,19 +1,18 @@
 import React from "react";
 import { UserContext } from "../context/UserContext";
-import { Link, Navigate, useParams } from "react-router-dom";
-import style from "../assets/css/accountPage.module.scss";
+import { Navigate } from "react-router-dom";
+import style from "../assets/css/profilePage.module.scss";
 import axios from "axios";
-import PlacesPage from "./PlacesPage";
 import AccountNav from "../components/AccountNav";
 
-const AccountPage = () => {
+const ProfilePage = () => {
   const [redirect, setRedirect] = React.useState(null);
   const { user, ready, setUser } = React.useContext(UserContext);
-  let { subpage } = useParams();
+  // let { subpage } = useParams();
 
-  if (subpage === undefined) {
-    subpage = "profile";
-  }
+  // if (subpage === undefined) {
+  //   subpage = "profile";
+  // }
 
   async function logout() {
     try {
@@ -48,24 +47,20 @@ const AccountPage = () => {
 
   return (
     <div>
-      <AccountNav subpage={subpage} />
-      {subpage === "profile" && (
-        <div className="text-center max-w-lg mx-auto">
-          <div>
-            Logged in as {user.username} ({user.email})
-          </div>
-          <button
-            onClick={logout}
-            className="bg-primary w-full max-w-sm py-2 px-6 mt-4 font-bold text-white rounded-full"
-          >
-            Logout
-          </button>
+      <AccountNav />
+      <div className="text-center max-w-lg mx-auto">
+        <div>
+          Logged in as {user.username} ({user.email})
         </div>
-      )}
-
-      {subpage === "places" && <PlacesPage />}
+        <button
+          onClick={logout}
+          className="bg-primary w-full max-w-sm py-2 px-6 mt-4 font-bold text-white rounded-full"
+        >
+          Logout
+        </button>
+      </div>
     </div>
   );
 };
 
-export default AccountPage;
+export default ProfilePage;

@@ -38,7 +38,7 @@ const PhotosUploader = ({ addedPhotos, onChange }) => {
 
   return (
     <>
-      <h2 className="text-2xl mt-4">Photos</h2>
+      <h2 className="text-2xl lg:text-3xl mt-4">Photos</h2>
       <p className="text-gray-500 text-sm">more = better</p>
       <div className="flex gap-2 ">
         <div className="MyInput ">
