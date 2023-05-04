@@ -4,7 +4,7 @@ const Perks = ({ selected, onChange }) => {
   function handleCbClick(event) {
     const { checked, name } = event.target;
     if (checked) {
-      onChange([...selected, event.target.name]);
+      onChange([...selected, name]);
     } else {
       onChange([...selected.filter((selectedName) => selectedName !== name)]);
     }
@@ -18,7 +18,12 @@ const Perks = ({ selected, onChange }) => {
       </p>
       <div className="gap-2 mt-2 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7">
         <label className="MyLabel">
-          <input type="checkbox" name="wifi" onChange={handleCbClick} />
+          <input
+            type="checkbox"
+            checked={selected.includes("wifi")}
+            name="wifi"
+            onChange={handleCbClick}
+          />
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -37,7 +42,12 @@ const Perks = ({ selected, onChange }) => {
           <span>Wifi</span>
         </label>
         <label className="MyLabel">
-          <input type="checkbox" name="parking" onChange={handleCbClick} />
+          <input
+            type="checkbox"
+            checked={selected.includes("parking")}
+            name="parking"
+            onChange={handleCbClick}
+          />
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -56,7 +66,12 @@ const Perks = ({ selected, onChange }) => {
           <span>Free parking spot</span>
         </label>
         <label className="MyLabel">
-          <input type="checkbox" name="tv" onChange={handleCbClick} />
+          <input
+            type="checkbox"
+            checked={selected.includes("tv")}
+            name="tv"
+            onChange={handleCbClick}
+          />
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -75,7 +90,12 @@ const Perks = ({ selected, onChange }) => {
           <span>TV</span>
         </label>
         <label className="MyLabel">
-          <input type="checkbox" name="radio" onChange={handleCbClick} />
+          <input
+            type="checkbox"
+            checked={selected.includes("radio")}
+            name="radio"
+            onChange={handleCbClick}
+          />
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -94,7 +114,12 @@ const Perks = ({ selected, onChange }) => {
           <span>Radio</span>
         </label>
         <label className="MyLabel">
-          <input type="checkbox" name="pets" onChange={handleCbClick} />
+          <input
+            type="checkbox"
+            checked={selected.includes("pets")}
+            name="pets"
+            onChange={handleCbClick}
+          />
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -113,7 +138,12 @@ const Perks = ({ selected, onChange }) => {
           <span>Pets</span>
         </label>
         <label className="MyLabel">
-          <input type="checkbox" name="entrance" onChange={handleCbClick} />
+          <input
+            type="checkbox"
+            checked={selected.includes("entrance")}
+            name="entrance"
+            onChange={handleCbClick}
+          />
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

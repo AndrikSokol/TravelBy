@@ -183,6 +183,48 @@ app.delete("/places", async (req, res) => {
   });
 });
 
+// app.get("/places/:id", (req, res) => {
+//   const id = req.params;
+// });
+
+app.put("/places", async (req, res) => {
+  const { token } = req.cookies;
+  const {
+    id,
+    title,
+    address,
+    addedPhotos,
+    description,
+    perks,
+    extraInfo,
+    checkIn,
+    checkOut,
+    maxGuests,
+  } = req.body;
+
+  jwt.verify(token, jwtSecret, {}, async (error, userData) => {
+    if (error) {
+      return res.status(404).json();
+    }
+    const placeDoc = await Place.findById(id);
+    if (userData.id === placeDoc.owner.toString()) {
+      placeDoc.set({
+        title,
+        address,
+        photos: addedPhotos,
+        description,
+        perks,
+        extraInfo,
+        checkIn,
+        checkOut,
+        maxGuests,
+      });
+      await placeDoc.save();
+      res.json("ok");
+    }
+  });
+});
+
 const start = () => {
   try {
     app.listen(PORT, () => console.log("server start on port " + PORT));

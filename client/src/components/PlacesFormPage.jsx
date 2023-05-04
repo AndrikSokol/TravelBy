@@ -3,9 +3,11 @@ import Perks from "./Perks";
 import axios from "axios";
 import PhotosUploader from "./PhotosUploader";
 import AccountNav from "./AccountNav";
-import { Navigate } from "react-router";
+import { Navigate, useParams } from "react-router";
+import { useSelector } from "react-redux";
 
 const PlacesFormPage = () => {
+  const { id } = useParams();
   const [title, setTitle] = React.useState("");
   const [address, setAddress] = React.useState("");
   const [addedPhotos, setAddedPhotos] = React.useState([]);
@@ -16,21 +18,53 @@ const PlacesFormPage = () => {
   const [checkOut, setCheckOut] = React.useState("");
   const [maxGuests, setMaxGuests] = React.useState(1);
   const [redirect, setRedirect] = React.useState(false);
+  const places = useSelector((state) => state.place.places);
 
-  function addedNewPlaces(event) {
+  React.useEffect(() => {
+    if (!id) {
+      return;
+    }
+    const place = places.filter((place) => place._id === id);
+    setState(...place);
+    console.log(places);
+  }, [id]);
+
+  const setState = (place) => {
+    setTitle(place.title);
+    setAddress(place.address);
+    setAddedPhotos(place.photos);
+    setDescription(place.description);
+    setPerks(place.perks);
+    setExtraInfo(place.extraInfo);
+    setCheckIn(place.checkIn);
+    setCheckOut(place.checkOut);
+    setMaxGuests(place.maxGuests);
+  };
+  function savePlace(event) {
     event.preventDefault();
+    const placeData = {
+      title,
+      address,
+      addedPhotos,
+      description,
+      perks,
+      extraInfo,
+      checkIn,
+      checkOut,
+      maxGuests,
+    };
     try {
-      axios.post("/places", {
-        title,
-        address,
-        addedPhotos,
-        description,
-        perks,
-        extraInfo,
-        checkIn,
-        checkOut,
-        maxGuests,
-      });
+      if (id) {
+        axios.put("/places", {
+          id,
+          ...placeData,
+        });
+      } else {
+        axios.post("/places", {
+          ...placeData,
+        });
+      }
+
       clearState();
       alert("succesfull add place");
       setRedirect(true);
@@ -58,7 +92,7 @@ const PlacesFormPage = () => {
   return (
     <div>
       <AccountNav />
-      <form className="w-[80%] lg:w-[60%] mx-auto" onSubmit={addedNewPlaces}>
+      <form className="w-[80%] lg:w-[60%] mx-auto" onSubmit={savePlace}>
         <h2 className="text-2xl lg:text-3xl mt-4">Title</h2>
         <p className="text-gray-500 text-sm">
           title for your place/ Should be short and catchy as in advertisment

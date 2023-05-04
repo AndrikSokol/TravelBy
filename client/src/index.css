@@ -18,6 +18,9 @@ input[type="text"] {
 textarea {
   @apply w-full outline-none border my-1 py-2 px-3 rounded-2xl;
 }
+textarea {
+  height: 200px;
+}
 
 .MyLabel {
   @apply border p-4 flex rounded-2xl gap-2 items-center cursor-pointer;

@@ -45,8 +45,14 @@ const PlacesPage = () => {
                 >
                   <div className="flex gap-4">
                     {place.photos.length > 0 && (
-                      <div className="h-32 w-32 shrink-0 grow">
-                        <img src={place.photos[0]} alt="" />
+                      <div className="flex h-32 w-32 shrink-0 grow">
+                        <img
+                          className="object-cover"
+                          src={
+                            "http://localhost:4500/uploads/" + place.photos[0]
+                          }
+                          alt=""
+                        />
                       </div>
                     )}
 
