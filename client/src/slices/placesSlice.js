@@ -13,11 +13,18 @@ export const placesSlice = createSlice({
   name: "places",
   initialState,
   reducers: {
-    addBooks: (state, action) => {
-      state.places.push(action.payload);
+    addPlaces: (state, action) => {
+      // state.places.push(action.payload);
+      state.places = action.payload;
+    },
+
+    deletePlace: (state, action) => {
+      state.places = state.places.filter(
+        (place) => place._id !== action.payload
+      );
     },
   },
 });
 
-export const { addBooks } = placesSlice.actions;
+export const { addPlaces, deletePlace } = placesSlice.actions;
 export default placesSlice.reducer;

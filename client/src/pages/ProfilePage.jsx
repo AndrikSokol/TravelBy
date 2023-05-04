@@ -8,11 +8,6 @@ import AccountNav from "../components/AccountNav";
 const ProfilePage = () => {
   const [redirect, setRedirect] = React.useState(null);
   const { user, ready, setUser } = React.useContext(UserContext);
-  // let { subpage } = useParams();
-
-  // if (subpage === undefined) {
-  //   subpage = "profile";
-  // }
 
   async function logout() {
     try {

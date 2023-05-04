@@ -142,7 +142,7 @@ app.post("/places", async (req, res) => {
       owner: userData.id,
       title,
       address,
-      addedPhotos,
+      photos: addedPhotos,
       description,
       perks,
       extraInfo,
@@ -160,12 +160,26 @@ app.get("/places", async (req, res) => {
     if (error) {
       return res.status(404).json();
     }
-    console.log(userData);
+    // console.log(userData);
     const places = await Place.find({
       owner: new mongoose.Types.ObjectId(userData.id),
     });
-    console.log(places);
+    // console.log(places);
     res.json(places);
+  });
+});
+
+app.delete("/places", async (req, res) => {
+  const { token } = req.cookies;
+  jwt.verify(token, jwtSecret, {}, async (error, userData) => {
+    if (error) {
+      return res.status(404).json();
+    }
+    console.log(req.body);
+    res.json(null);
+    // const places = await Place.deleteOne({
+    //   owner: new mongoose.Types.ObjectId(userData.id),
+    // });
   });
 });
 
