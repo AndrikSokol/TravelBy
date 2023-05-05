@@ -5,8 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { deletePlace } from "../slices/placesSlice";
 import { addPlaces } from "../slices/placesSlice";
+import { Dialog, Transition } from "@headlessui/react";
 
 const PlacesPage = () => {
+  const [modal, setModal] = React.useState(false);
   const dispatch = useDispatch();
   React.useEffect(() => {
     async function fetchData() {
@@ -17,25 +19,47 @@ const PlacesPage = () => {
     fetchData();
   }, []);
 
-  async function deletePlace(e, place) {
-    try {
-      e.preventDefault();
-      const { data } = await axios.delete("places", place);
-      dispatch(deletePlace(data._id));
-      alert("succesfull delete");
-    } catch (error) {
-      alert("cant delete");
-    }
-  }
+  // async function removePlace({_id}) {
+  //   try {
+  //     await axios.put("/place", _id);
+  //     dispatch(deletePlace(_id));
+  //     alert("succesfull delete");
+  //   } catch (error) {
+  //     alert("cant delete");
+  //   }
+  // }
+
   const places = useSelector((state) => state.place.places);
 
   return (
     <div>
+      <Dialog
+        as="div"
+        open={modal}
+        onClose={() => setModal(false)}
+        className="flex  items-center absolute top-0 bottom-0 left-0 right-0 bg-black opacity-20 "
+      >
+        <div className=" mx-auto w-[30%] h-[20%] p-5 bg-white rounded-lg">
+          <p className="text-black w-full text-center text-xl">
+            You sure to delete this place?
+          </p>
+          <button
+            className="bg-primary py-2 px-3 w-full rounded-xl my-5 text-white font-bold"
+            onClick={() => setModal(false)}
+          >
+            Delete
+          </button>
+        </div>
+      </Dialog>
+
       <AccountNav />
       <div className="w-full lg:w-[80%] mx-auto">
         {places !== undefined && (
           <div>
-            <div className="text-center"> List Of All Added Places</div>
+            <div className="text-center font-bold  text-lg lg:text-xl">
+              {" "}
+              List Of All Added Places
+            </div>
 
             <div>
               {places.map((place) => (
@@ -45,9 +69,9 @@ const PlacesPage = () => {
                 >
                   <div className="flex gap-4">
                     {place.photos.length > 0 && (
-                      <div className="flex h-32 w-32 shrink-0 grow">
+                      <div className="flex h-32 w-32 shrink-0 grow ">
                         <img
-                          className="object-cover"
+                          className="object-cover rounded-sm"
                           src={
                             "http://localhost:4500/uploads/" + place.photos[0]
                           }
@@ -72,7 +96,7 @@ const PlacesPage = () => {
                       show
                     </Link>
                     <button
-                      onClick={(e) => deletePlace(e, place)}
+                      onClick={() => setModal(true)}
                       className="bg-primary py-1 px-3 rounded-md hover:opacity-95 ease-in-out"
                     >
                       delete

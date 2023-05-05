@@ -7,7 +7,7 @@ const PhotosUploader = ({ addedPhotos, onChange }) => {
   async function addPhotoByLink(ev) {
     try {
       ev.preventDefault();
-      const { data: filename } = await axios.post("/upload-byLink", {
+      const { data: filename } = await axios.post("/upload-by-link", {
         link: photoLink,
       });
       onChange((prev) => [...prev, filename]);

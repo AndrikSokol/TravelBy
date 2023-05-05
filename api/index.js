@@ -169,23 +169,21 @@ app.get("/places", async (req, res) => {
   });
 });
 
-app.delete("/places", async (req, res) => {
+app.put("/place", async (req, res) => {
   const { token } = req.cookies;
+  const { _id } = req.body;
   jwt.verify(token, jwtSecret, {}, async (error, userData) => {
     if (error) {
       return res.status(404).json();
     }
-    console.log(req.body);
-    res.json(null);
-    // const places = await Place.deleteOne({
-    //   owner: new mongoose.Types.ObjectId(userData.id),
-    // });
+
+    await Place.deleteOne({
+      _id,
+      owner: new mongoose.Types.ObjectId(userData.id),
+    });
+    res.json("ok");
   });
 });
-
-// app.get("/places/:id", (req, res) => {
-//   const id = req.params;
-// });
 
 app.put("/places", async (req, res) => {
   const { token } = req.cookies;
