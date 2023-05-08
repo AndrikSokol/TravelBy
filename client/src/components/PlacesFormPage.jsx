@@ -18,6 +18,7 @@ const PlacesFormPage = () => {
   const [checkOut, setCheckOut] = React.useState("");
   const [maxGuests, setMaxGuests] = React.useState(1);
   const [redirect, setRedirect] = React.useState(false);
+  const [price, setPrice] = React.useState(0);
   const places = useSelector((state) => state.place.places);
 
   React.useEffect(() => {
@@ -39,6 +40,7 @@ const PlacesFormPage = () => {
     setCheckIn(place.checkIn);
     setCheckOut(place.checkOut);
     setMaxGuests(place.maxGuests);
+    setPrice(place.price);
   };
   function savePlace(event) {
     event.preventDefault();
@@ -52,6 +54,7 @@ const PlacesFormPage = () => {
       checkIn,
       checkOut,
       maxGuests,
+      price,
     };
     try {
       if (id) {
@@ -87,6 +90,7 @@ const PlacesFormPage = () => {
     setCheckIn("");
     setCheckOut("");
     setMaxGuests(1);
+    setPrice(0);
   };
 
   return (
@@ -163,6 +167,18 @@ const PlacesFormPage = () => {
               onChange={(ev) => setMaxGuests(ev.target.value)}
               className="MyInput"
               type="number"
+            />
+          </div>
+        </div>
+        <div>
+          <h2 className="text-2xl mt-4">Price per night</h2>
+          <div>
+            <input
+              className="MyInput"
+              value={price}
+              onChange={(ev) => setPrice(ev.target.value)}
+              type="number"
+              placeholder="100$"
             />
           </div>
         </div>

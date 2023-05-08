@@ -14,7 +14,7 @@ const fs = require("fs");
 
 const bcryptSalt = bcrypt.genSaltSync(10);
 const jwtSecret = "dasfdag";
-const PORT = process.env.PORT || 4500;
+const PORT = process.env.PORT || 4000;
 
 app.use(express.json());
 app.use(cookieParser());
@@ -30,9 +30,6 @@ mongoose
   .connect(process.env.MONGO_URL)
   .then((res) => console.log("Connected to DB"))
   .catch((error) => console.log(error));
-app.get("/test", (req, res) => {
-  res.json("test OK");
-});
 
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
@@ -135,6 +132,7 @@ app.post("/places", async (req, res) => {
     checkIn,
     checkOut,
     maxGuests,
+    price,
   } = req.body;
   jwt.verify(token, jwtSecret, {}, async (error, userData) => {
     if (error) throw error;
@@ -149,6 +147,7 @@ app.post("/places", async (req, res) => {
       checkIn,
       checkOut,
       maxGuests,
+      price,
     });
     res.json(placeDoc);
   });
@@ -158,20 +157,27 @@ app.get("/places", async (req, res) => {
   const { token } = req.cookies;
   jwt.verify(token, jwtSecret, {}, async (error, userData) => {
     if (error) {
-      return res.status(404).json();
+      return res.status(404).json({ message: "invalid token" });
     }
-    // console.log(userData);
+
     const places = await Place.find({
       owner: new mongoose.Types.ObjectId(userData.id),
     });
-    // console.log(places);
     res.json(places);
   });
 });
-
+app.get("/places-all", async (req, res) => {
+  try {
+    const places = await Place.find();
+    res.json(places);
+  } catch (error) {
+    res.status(500).json("cant find places");
+  }
+});
 app.put("/place", async (req, res) => {
   const { token } = req.cookies;
   const { _id } = req.body;
+  console.log(req.body);
   jwt.verify(token, jwtSecret, {}, async (error, userData) => {
     if (error) {
       return res.status(404).json();
@@ -181,7 +187,7 @@ app.put("/place", async (req, res) => {
       _id,
       owner: new mongoose.Types.ObjectId(userData.id),
     });
-    res.json("ok");
+    res.json(_id);
   });
 });
 
@@ -198,6 +204,7 @@ app.put("/places", async (req, res) => {
     checkIn,
     checkOut,
     maxGuests,
+    price,
   } = req.body;
 
   jwt.verify(token, jwtSecret, {}, async (error, userData) => {
@@ -216,6 +223,7 @@ app.put("/places", async (req, res) => {
         checkIn,
         checkOut,
         maxGuests,
+        price,
       });
       await placeDoc.save();
       res.json("ok");

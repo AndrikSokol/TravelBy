@@ -8,48 +8,69 @@ import { addPlaces } from "../slices/placesSlice";
 import { Dialog, Transition } from "@headlessui/react";
 
 const PlacesPage = () => {
-  const [modal, setModal] = React.useState(false);
+  const [isOpen, setIsOpen] = React.useState(false);
   const dispatch = useDispatch();
+  const [currentPlace, setCurrentPlace] = React.useState({});
   React.useEffect(() => {
     async function fetchData() {
-      console.log("useeffect");
-      const { data } = await axios.get("/places");
-      dispatch(addPlaces(data));
+      try {
+        console.log("useeffect");
+        const { data } = await axios.get("/places", { withCredentials: true });
+        dispatch(addPlaces(data));
+      } catch (error) {
+        console.log("not Found " + error);
+      }
     }
     fetchData();
   }, []);
 
-  // async function removePlace({_id}) {
-  //   try {
-  //     await axios.put("/place", _id);
-  //     dispatch(deletePlace(_id));
-  //     alert("succesfull delete");
-  //   } catch (error) {
-  //     alert("cant delete");
-  //   }
-  // }
+  React.useEffect(() => {
+    if (isOpen === false) {
+      setCurrentPlace({});
+    }
+  }, [isOpen]);
+
+  function handleModal(place) {
+    setIsOpen(true);
+    setCurrentPlace(place);
+  }
+  async function removePlace() {
+    try {
+      const { _id } = currentPlace;
+      const response = await axios.put("/place", { _id });
+      dispatch(deletePlace(response.data));
+      console.log(response);
+      alert("succesfull delete");
+      setIsOpen(false);
+    } catch (error) {
+      alert("cant delete");
+    }
+  }
 
   const places = useSelector((state) => state.place.places);
 
   return (
     <div>
       <Dialog
-        as="div"
-        open={modal}
-        onClose={() => setModal(false)}
-        className="flex  items-center absolute top-0 bottom-0 left-0 right-0 bg-black opacity-20 "
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        className="flex  items-center absolute  top-0 bottom-0 left-0 right-0  bg-black/30"
       >
-        <div className=" mx-auto w-[30%] h-[20%] p-5 bg-white rounded-lg">
-          <p className="text-black w-full text-center text-xl">
+        <Dialog.Panel className=" flex mx-auto  flex-col p-5 bg-white rounded-lg">
+          <Dialog.Title className="text-black w-full text-center text-xl">
+            Delete the place
+          </Dialog.Title>
+          <Dialog.Description>
             You sure to delete this place?
-          </p>
+          </Dialog.Description>
+
           <button
+            onClick={removePlace}
             className="bg-primary py-2 px-3 w-full rounded-xl my-5 text-white font-bold"
-            onClick={() => setModal(false)}
           >
             Delete
           </button>
-        </div>
+        </Dialog.Panel>
       </Dialog>
 
       <AccountNav />
@@ -62,48 +83,49 @@ const PlacesPage = () => {
             </div>
 
             <div>
-              {places.map((place) => (
-                <div
-                  className="flex  gap-4 justify-between shadow p-3 my-2 items-center rounded-lg"
-                  key={place._id}
-                >
-                  <div className="flex gap-4">
-                    {place.photos.length > 0 && (
-                      <div className="flex h-32 w-32 shrink-0 grow ">
-                        <img
-                          className="object-cover rounded-sm"
-                          src={
-                            "http://localhost:4500/uploads/" + place.photos[0]
-                          }
-                          alt=""
-                        />
-                      </div>
-                    )}
+              {places.length > 0 &&
+                places.map((place) => (
+                  <div
+                    className="flex  gap-4 justify-between shadow p-3 my-2 items-center rounded-lg"
+                    key={place._id}
+                  >
+                    <div className="flex gap-4">
+                      {place.photos.length > 0 && (
+                        <div className="flex h-32 w-32 shrink-0 grow ">
+                          <img
+                            className="object-cover rounded-sm"
+                            src={
+                              "http://localhost:4500/uploads/" + place.photos[0]
+                            }
+                            alt=""
+                          />
+                        </div>
+                      )}
 
-                    <div className="text-justify grow-0 shrink">
-                      <div className=" text-lg lg:text-xl lg:font-bold">
-                        {place.title}
+                      <div className="text-justify grow-0 shrink">
+                        <div className=" text-lg lg:text-xl lg:font-bold">
+                          {place.title}
+                        </div>
+                        <p>{place.description}</p>
                       </div>
-                      <p>{place.description}</p>
+                    </div>
+
+                    <div className="flex gap-3 text-white">
+                      <Link
+                        to={"/account/places/" + place._id}
+                        className="bg-primary py-1 px-3 rounded-md hover:opacity-95 ease-in-out"
+                      >
+                        show
+                      </Link>
+                      <button
+                        onClick={() => handleModal(place)}
+                        className="bg-primary py-1 px-3 rounded-md hover:opacity-95 ease-in-out"
+                      >
+                        delete
+                      </button>
                     </div>
                   </div>
-
-                  <div className="flex gap-3 text-white">
-                    <Link
-                      to={"/account/places/" + place._id}
-                      className="bg-primary py-1 px-3 rounded-md hover:opacity-95 ease-in-out"
-                    >
-                      show
-                    </Link>
-                    <button
-                      onClick={() => setModal(true)}
-                      className="bg-primary py-1 px-3 rounded-md hover:opacity-95 ease-in-out"
-                    >
-                      delete
-                    </button>
-                  </div>
-                </div>
-              ))}
+                ))}
             </div>
             <br />
           </div>
