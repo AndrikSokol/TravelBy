@@ -86,14 +86,14 @@ const PlacesPage = () => {
               {places.length > 0 &&
                 places.map((place) => (
                   <div
-                    className="flex  gap-4 justify-between shadow p-3 my-2 items-center rounded-lg"
+                    className="sm:flex  sm:gap-4 sm:justify-between shadow p-3 my-2 items-center rounded-lg"
                     key={place._id}
                   >
-                    <div className="flex gap-4">
+                    <div className="sm:flex gap-4 ">
                       {place.photos.length > 0 && (
-                        <div className="flex h-32 w-32 shrink-0 grow ">
+                        <div className=" flex w-full sm:w-auto shrink-0 grow justify-center sm:justify-start">
                           <img
-                            className="object-cover rounded-sm"
+                            className="object-cover rounded-sm  h-48 sm:h-48 sm:w-48"
                             src={
                               "http://localhost:4500/uploads/" + place.photos[0]
                             }
@@ -110,18 +110,18 @@ const PlacesPage = () => {
                       </div>
                     </div>
 
-                    <div className="flex gap-3 text-white">
+                    <div className="flex my-2 sm:my-0 gap-3 text-white">
                       <Link
                         to={"/account/places/" + place._id}
                         className="bg-primary py-1 px-3 rounded-md hover:opacity-95 ease-in-out"
                       >
-                        show
+                        Edit
                       </Link>
                       <button
                         onClick={() => handleModal(place)}
                         className="bg-primary py-1 px-3 rounded-md hover:opacity-95 ease-in-out"
                       >
-                        delete
+                        Delete
                       </button>
                     </div>
                   </div>

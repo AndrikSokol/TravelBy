@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-
+import { Link } from "react-router-dom";
 const IndexPage = () => {
   const [places, setPlaces] = React.useState([]);
   React.useEffect(() => {
@@ -14,10 +14,11 @@ const IndexPage = () => {
   }, []);
 
   return (
-    <div className="w-[90%] my-5 mx-auto grid  gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    <div className="w-[90%] my-5 mx-auto grid  gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
       {places.length > 0 &&
         places.map((place) => (
-          <div
+          <Link
+            to={"/place/" + place._id}
             className="shadow-xl cursor-pointer hover:shadow-2xl transition-shadow hover:scale-[101%] "
             key={place._id}
           >
@@ -40,7 +41,7 @@ const IndexPage = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </Link>
         ))}
     </div>
   );

@@ -231,6 +231,15 @@ app.put("/places", async (req, res) => {
   });
 });
 
+app.get("/place/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    res.json(await Place.findById(id));
+  } catch (error) {
+    return res.status(504).json({ message: "cant find place" });
+  }
+});
+
 const start = () => {
   try {
     app.listen(PORT, () => console.log("server start on port " + PORT));
