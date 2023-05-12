@@ -10,7 +10,7 @@ const RegisterPage = () => {
   async function registerUser(e) {
     e.preventDefault();
     try {
-      await axios.post("/register", {
+      await axios.post("/registration", {
         username,
         email,
         password,

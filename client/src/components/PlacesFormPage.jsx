@@ -63,7 +63,7 @@ const PlacesFormPage = () => {
           ...placeData,
         });
       } else {
-        axios.post("/places", {
+        axios.post("/place", {
           ...placeData,
         });
       }

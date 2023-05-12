@@ -6,7 +6,7 @@ const IndexPage = () => {
   React.useEffect(() => {
     async function fetchPlaces() {
       try {
-        const { data } = await axios.get("/places-all");
+        const { data } = await axios.get("/places");
         setPlaces(data);
       } catch (error) {}
     }

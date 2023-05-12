@@ -15,7 +15,9 @@ const PlacesPage = () => {
     async function fetchData() {
       try {
         console.log("useeffect");
-        const { data } = await axios.get("/places", { withCredentials: true });
+        const { data } = await axios.get("/places-for-user", {
+          withCredentials: true,
+        });
         dispatch(addPlaces(data));
       } catch (error) {
         console.log("not Found " + error);
@@ -39,7 +41,6 @@ const PlacesPage = () => {
       const { _id } = currentPlace;
       const response = await axios.put("/place", { _id });
       dispatch(deletePlace(response.data));
-      console.log(response);
       alert("succesfull delete");
       setIsOpen(false);
     } catch (error) {
