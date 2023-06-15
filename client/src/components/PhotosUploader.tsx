@@ -1,15 +1,19 @@
 import axios from "axios";
-import React from "react";
+import React, { FC } from "react";
+import { api } from "../services/api";
+import { BASEURL } from "../constants/constants";
 
-const PhotosUploader = ({ addedPhotos, onChange }) => {
-  const [photoLink, setPhotoLink] = React.useState("");
+type PhotosUploaderProps  = {
+  addedPhotos: string[]
+  onChange:  React.Dispatch<React.SetStateAction<string[]>>
+}
+const PhotosUploader:FC<PhotosUploaderProps> = ({ addedPhotos, onChange }) => {
+  const [photoLink, setPhotoLink] = React.useState<string>();
 
-  async function addPhotoByLink(ev) {
+  async function addPhotoByLink(ev :React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     try {
       ev.preventDefault();
-      const { data: filename } = await axios.post("/upload-by-link", {
-        link: photoLink,
-      });
+      const filename  = await api.uploadByLink(photoLink)
       onChange((prev) => [...prev, filename]);
       setPhotoLink("");
       alert("photo added");
@@ -18,17 +22,17 @@ const PhotosUploader = ({ addedPhotos, onChange }) => {
     }
   }
 
-  async function uploadPhoto(ev) {
+  async function uploadPhoto(ev:React.ChangeEvent<HTMLInputElement>) {
     const files = ev.target.files;
+    if(files === null){
+      return  alert("Добавьте фото")
+    }
     const data = new FormData();
     for (let i = 0; i < files.length; i++) {
       data.append("photos", files[i]);
     }
-
     try {
-      const { data: filenames } = await axios.post("/upload-by-device", data, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const filenames = await api.uploadByDevice(data)
       onChange((prev) => [...prev, ...filenames]);
       alert("succesfull for upload by device");
     } catch (error) {
@@ -36,12 +40,12 @@ const PhotosUploader = ({ addedPhotos, onChange }) => {
     }
   }
 
-  const removePhoto = (event, filename) => {
+  const removePhoto = (event:React.MouseEvent<HTMLButtonElement, MouseEvent>, filename:string):void => {
     event.preventDefault();
     onChange([...addedPhotos.filter((photo) => photo !== filename)]);
   };
 
-  const selectAsMainPhoto = (event, filename) => {
+  const selectAsMainPhoto = (event:React.MouseEvent<HTMLButtonElement, MouseEvent>, filename:string) :void => {
     event.preventDefault();
     onChange([filename, ...addedPhotos.filter((photo) => photo !== filename)]);
   };
@@ -75,7 +79,7 @@ const PhotosUploader = ({ addedPhotos, onChange }) => {
               <div className="h-32 flex relative" key={link}>
                 <img
                   className="rounded-2xl w-full object-cover"
-                  src={"http://localhost:4500/uploads/" + link}
+                  src={`${BASEURL}/uploads/` + link}
                   alt=""
                 />
                 <button

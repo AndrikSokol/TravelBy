@@ -6,18 +6,17 @@ import axios from "axios";
 import { deletePlace } from "../slices/placesSlice";
 import { addPlaces } from "../slices/placesSlice";
 import { Dialog, Transition } from "@headlessui/react";
+import { api } from "../services/api";
+import {  IPlaceData } from "../types/place.interface";
 
 const PlacesPage = () => {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = React.useState<boolean>(false);
   const dispatch = useDispatch();
-  const [currentPlace, setCurrentPlace] = React.useState({});
+  const [currentPlace, setCurrentPlace] = React.useState<IPlaceData>({}as IPlaceData);
   React.useEffect(() => {
     async function fetchData() {
       try {
-        console.log("useeffect");
-        const { data } = await axios.get("/places-for-user", {
-          withCredentials: true,
-        });
+        const data  = await api.getPlacesForUser();
         dispatch(addPlaces(data));
       } catch (error) {
         console.log("not Found " + error);
@@ -26,21 +25,21 @@ const PlacesPage = () => {
     fetchData();
   }, []);
 
-  React.useEffect(() => {
-    if (isOpen === false) {
-      setCurrentPlace({});
-    }
-  }, [isOpen]);
+  // React.useEffect(() => {
+  //   if (isOpen === false) {
+  //     setCurrentPlace({});
+  //   }
+  // }, [isOpen]);
 
-  function handleModal(place) {
+  function handleModal(place : IPlaceData) {
     setIsOpen(true);
     setCurrentPlace(place);
   }
   async function removePlace() {
     try {
       const { _id } = currentPlace;
-      const response = await axios.put("/place", { _id });
-      dispatch(deletePlace(response.data));
+      const data = await api.removePlace(_id)
+      dispatch(deletePlace(data));
       alert("succesfull delete");
       setIsOpen(false);
     } catch (error) {
@@ -48,7 +47,9 @@ const PlacesPage = () => {
     }
   }
 
-  const places = useSelector((state) => state.place.places);
+  const {isLoading,places,error} = useSelector((state) => state.place);
+
+  
 
   return (
     <div>

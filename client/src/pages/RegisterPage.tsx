@@ -1,23 +1,18 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { api } from "../services/api";
 
 const RegisterPage = () => {
-  const [username, setUsername] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
+  const [username, setUsername] = React.useState<string>("");
+  const [email, setEmail] = React.useState<string>("");
+  const [password, setPassword] = React.useState<string>("");
 
-  async function registerUser(e) {
-    e.preventDefault();
+  async function registerUser(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
     try {
-      await axios.post("/registration", {
-        username,
-        email,
-        password,
-      });
-      alert("Registration successful");
+      await api.registration(username,email,password)
     } catch (e) {
-      alert("Registration failed");
     }
   }
 

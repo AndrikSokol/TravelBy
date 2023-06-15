@@ -2,15 +2,17 @@ import axios from "axios";
 import React from "react";
 import { useParams } from "react-router";
 import { MdPlace } from "react-icons/md";
+import { api } from "../services/api";
+import { IPlace } from "../types/place.interface";
 
 const PlacePage = () => {
-  const [place, setPlace] = React.useState({});
-  const [showAllPhotos, setShowAllPhotos] = React.useState(false);
+  const [place, setPlace] = React.useState<IPlace>({} as IPlace);
+  const [showAllPhotos, setShowAllPhotos] = React.useState<boolean>(false);
   const { id } = useParams();
   React.useEffect(() => {
     async function fetchPlace() {
       try {
-        const { data } = await axios.get(`/place/${id}`);
+        const { data } = await api.getPlace(id);
         setPlace(data);
       } catch (error) {
         console.log(error);
@@ -171,16 +173,16 @@ const PlacePage = () => {
       )}
       <div className="py-2">
         <h2 className="font-semibold text-2xl">Description</h2>
-        <p className="sm:text-lg">{place.description}</p>
+        <p className="sm:text-lg">{place?.description}</p>
       </div>
       <div className="grid grid-cols-2 ">
         <div className="sm:text-xl">
-          Check-in: {place.checkIn} <br />
-          Check-out: {place.checkOut} <br />
-          Max number of guests: {place.maxGuests} <br />
+          Check-in: {place?.checkIn} <br />
+          Check-out: {place?.checkOut} <br />
+          Max number of guests: {place?.maxGuests} <br />
         </div>
         <div className="sm:w-[250px] overflow-hidden shadow sm:text-xl gap-1 bg-gray-300 flex flex-col items-center justify-center rounded-2xl">
-          <div>Price: {place.price}$ / per night</div>
+          <div>Price: {place?.price}$ / per night</div>
           <button className="bg-primary p-1 text-white rounded-2xl w-full">
             Book this place
           </button>

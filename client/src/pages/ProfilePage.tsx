@@ -4,19 +4,19 @@ import { Navigate } from "react-router-dom";
 import style from "../assets/css/profilePage.module.scss";
 import axios from "axios";
 import AccountNav from "../components/AccountNav";
+import { api } from "../services/api";
+import { IUser, IUserContext } from "../types/user.interface";
 
 const ProfilePage = () => {
-  const [redirect, setRedirect] = React.useState(null);
-  const { user, ready, setUser } = React.useContext(UserContext);
+  const [redirect, setRedirect] = React.useState<string | null>(null);
+  const { user, ready, setUser } = React.useContext<IUserContext>(UserContext);
 
-  async function logout() {
+async function logout() {
     try {
-      await axios.post("/logout");
-      alert("logout succesfull");
+      await api.logout();
       setRedirect("/");
-      setUser(null);
+      setUser({}as IUser);
     } catch (e) {
-      alert("logout err");
     }
   }
 
@@ -44,9 +44,9 @@ const ProfilePage = () => {
     <div>
       <AccountNav />
       <div className="text-center max-w-lg mx-auto">
-        <div>
-          Logged in as {user.username} ({user.email})
-        </div>
+        {user && <div>Logged in as {user.username} ({user.email})
+        </div>}
+          
         <button
           onClick={logout}
           className="bg-primary w-full max-w-sm py-2 px-6 mt-4 font-bold text-white rounded-full"

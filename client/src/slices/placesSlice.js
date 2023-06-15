@@ -1,13 +1,24 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { api, instance } from "../services/api";
 
 const initialState = {
   places: [],
+  isLoading : true,
+  error:'',
 };
 
-// const fetchplacesById = createAsyncThunk(
-//     "places/fetchplacesById",
-//     async()
-// )
+ export const fetchPlaces= createAsyncThunk(
+   "places",
+     async(_,thunkAPI)=>{
+      try {
+        const {data} =  await api.getPlaces();
+        return data;
+      } catch (error) {
+        return thunkAPI.rejectWithValue(error);
+      }
+      
+     }
+ )
 
 export const placesSlice = createSlice({
   name: "places",
@@ -24,6 +35,20 @@ export const placesSlice = createSlice({
       );
     },
   },
+  extraReducers:{
+    [fetchPlaces.fulfilled.type]:(state,action)=>{
+      state.isLoading = false;
+      state.places = action.payload;
+    },
+    [fetchPlaces.pending.type]:(state,action)=>{
+      state.isLoading = true;
+    },
+    [fetchPlaces.rejected.type] :(state,action)=>{
+      state.isLoading = false;
+     state.error = action.error
+    }
+  }
+  
 });
 
 export const { addPlaces, deletePlace } = placesSlice.actions;

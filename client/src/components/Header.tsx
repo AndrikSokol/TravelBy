@@ -1,9 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
+import { IUserContext } from "../types/user.interface";
+
 
 const Header = () => {
-  const { user } = React.useContext(UserContext);
+  const { user } = React.useContext<IUserContext>(UserContext);
   return (
     <header className="flex gap-2 justify-between">
       <Link to={"/"} className="flex items-center gap-1">

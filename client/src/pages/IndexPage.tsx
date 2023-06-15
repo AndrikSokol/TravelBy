@@ -1,18 +1,25 @@
 import React from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { api } from "../services/api";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchPlaces } from "../slices/placesSlice";
 const IndexPage = () => {
-  const [places, setPlaces] = React.useState([]);
+  const dispatch = useDispatch();
+  // const [places, setPlaces] = React.useState([]);
   React.useEffect(() => {
-    async function fetchPlaces() {
-      try {
-        const { data } = await axios.get("/places");
-        setPlaces(data);
-      } catch (error) {}
-    }
-    fetchPlaces();
+    dispatch(fetchPlaces());
   }, []);
 
+  const {isLoading,places,error} = useSelector((state) => state.place);
+
+  if(isLoading){
+    return <div>загрузка...</div>
+  }
+
+  if(error){
+    return <div>Не удалось </div>
+  }
   return (
     <div className="w-[90%] my-5 mx-auto grid  gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
       {places.length > 0 &&
@@ -34,10 +41,10 @@ const IndexPage = () => {
               )}
 
               <div className="p-2">
-                <div className="text-xl font-bold">{place.title}</div>
-                <div className="text-sm text-gray-500">{place.address}</div>
+                <div className="text-xl font-bold">{place?.title}</div>
+                <div className="text-sm text-gray-500">{place?.address}</div>
                 <div className="text-md">
-                  <span className="font-bold">{place.price}</span>$ per night
+                  <span className="font-bold">{place?.price}</span>$ per night
                 </div>
               </div>
             </div>

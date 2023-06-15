@@ -8,16 +8,16 @@ import { useSelector } from "react-redux";
 
 const PlacesFormPage = () => {
   const { id } = useParams();
-  const [title, setTitle] = React.useState("");
-  const [address, setAddress] = React.useState("");
-  const [addedPhotos, setAddedPhotos] = React.useState([]);
-  const [description, setDescription] = React.useState("");
-  const [perks, setPerks] = React.useState([]);
-  const [extraInfo, setExtraInfo] = React.useState("");
-  const [checkIn, setCheckIn] = React.useState("");
-  const [checkOut, setCheckOut] = React.useState("");
-  const [maxGuests, setMaxGuests] = React.useState(1);
-  const [redirect, setRedirect] = React.useState(false);
+  const [title, setTitle] = React.useState<string>("");
+  const [address, setAddress] = React.useState<string>("");
+  const [addedPhotos, setAddedPhotos] = React.useState<[]>([]);
+  const [description, setDescription] = React.useState<string>("");
+  const [perks, setPerks] = React.useState<[]>([]);
+  const [extraInfo, setExtraInfo] = React.useState<string>("");
+  const [checkIn, setCheckIn] = React.useState<number | null>(null);
+  const [checkOut, setCheckOut] = React.useState<number | null>(null);
+  const [maxGuests, setMaxGuests] = React.useState<number>(1);
+  const [redirect, setRedirect] = React.useState<boolean>(false);
   const [price, setPrice] = React.useState(0);
   const places = useSelector((state) => state.place.places);
 
@@ -85,10 +85,10 @@ const PlacesFormPage = () => {
     setAddress("");
     setAddedPhotos([]);
     setDescription("");
-    setPerks("");
+    setPerks([]);
     setExtraInfo("");
-    setCheckIn("");
-    setCheckOut("");
+    setCheckIn(null);
+    setCheckOut(null);
     setMaxGuests(1);
     setPrice(0);
   };
