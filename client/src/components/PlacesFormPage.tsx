@@ -5,6 +5,7 @@ import PhotosUploader from "./PhotosUploader";
 import AccountNav from "./AccountNav";
 import { Navigate, useParams } from "react-router";
 import { useSelector } from "react-redux";
+import { useAppSelector } from "../hooks/redux";
 
 const PlacesFormPage = () => {
   const { id } = useParams();
@@ -19,7 +20,7 @@ const PlacesFormPage = () => {
   const [maxGuests, setMaxGuests] = React.useState<number>(1);
   const [redirect, setRedirect] = React.useState<boolean>(false);
   const [price, setPrice] = React.useState(0);
-  const places = useSelector((state) => state.place.places);
+  const places = useAppSelector((state) => state.place.places);
 
   React.useEffect(() => {
     if (!id) {

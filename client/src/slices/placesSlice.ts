@@ -1,9 +1,15 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { api, instance } from "../services/api";
+import { IPlaceData } from "../types/place.interface";
 
-const initialState = {
+interface placesState {
+  places: IPlaceData[],
+  isLoading: boolean
+  error:string
+}
+const initialState:placesState = {
   places: [],
-  isLoading : true,
+  isLoading : false,
   error:'',
 };
 
@@ -11,7 +17,7 @@ const initialState = {
    "places",
      async(_,thunkAPI)=>{
       try {
-        const {data} =  await api.getPlaces();
+        const data =  await api.getPlaces();
         return data;
       } catch (error) {
         return thunkAPI.rejectWithValue(error);

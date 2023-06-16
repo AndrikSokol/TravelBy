@@ -17,6 +17,7 @@ export const UserContextProvider:FC<UserContextProviderProps> =({ children }) =>
     async function fetchUser() {
       if (!user) {
         const data = await api.getProfile(); 
+        console.log("uuuser "+ data)
           setUser(data);
           setReady(true);
         

@@ -32,7 +32,7 @@ export const api = {
             password,
           });
     },
-    getPlace: async (id:string) : Promise<IPlaceData> => {
+    getPlace: async (id:string | undefined) : Promise<IPlaceData> => {
         const {data} =  await instance.get<IPlaceData>(`/place/${id}`);
         return data;
     },
@@ -56,15 +56,15 @@ export const api = {
         return data;
     },
 
-    uploadByLink:async(photoLink:string)=>{
-        const {data} = await instance.post("/upload-by-link", {
+    uploadByLink:async(photoLink:string):Promise<string[]>=>{
+        const {data} = await instance.post<string[]>("/upload-by-link", {
             link: photoLink,
           });
         return data;
     },
 
-    uploadByDevice: async(data)=>{
-        const {data} = await instance.post("/upload-by-device", data, {
+    uploadByDevice: async(photos:string[]): Promise<string[]>=>{
+        const {data} = await instance.post<string[]>("/upload-by-device", photos, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 

@@ -12,8 +12,8 @@ const PlacePage = () => {
   React.useEffect(() => {
     async function fetchPlace() {
       try {
-        const { data } = await api.getPlace(id);
-        setPlace(data);
+        const  place  = await api.getPlace(id);
+        setPlace(place);
       } catch (error) {
         console.log(error);
       }
@@ -118,7 +118,7 @@ const PlacePage = () => {
             </div>
           </div>
           <div className="relative ">
-            <div className="rounded-2xl mx-auto  overflow-hidden grid gap-y-px gap-2 grid-cols-[2fr_1fr] justify-center">
+            {/* <div className="rounded-2xl mx-auto  overflow-hidden grid gap-y-px gap-2 grid-cols-[2fr_1fr] justify-center">
               <div className="">
                 {place.photos?.[0] && (
                   <div className="aspect-square  object-cover">
@@ -167,7 +167,7 @@ const PlacePage = () => {
                   </button>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       )}

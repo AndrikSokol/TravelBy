@@ -44,7 +44,7 @@ async function logout() {
     <div>
       <AccountNav />
       <div className="text-center max-w-lg mx-auto">
-        {user && <div>Logged in as {user.username} ({user.email})
+        {user !==null && <div>Logged in as {user.username} ({user.email})
         </div>}
           
         <button

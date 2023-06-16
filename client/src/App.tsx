@@ -9,6 +9,7 @@ import ProfilePage from "./pages/ProfilePage";
 import PlacesPage from "./pages/PlacesPage";
 import PlacesFormPage from "./components/PlacesFormPage";
 import PlacePage from "./pages/PlacePage";
+import React from "react";
 
 
 function App() {

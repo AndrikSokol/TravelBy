@@ -1,27 +1,40 @@
-import React from "react";
+import React, { useRef } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { api } from "../services/api";
-import { useDispatch, useSelector } from "react-redux";
 import { fetchPlaces } from "../slices/placesSlice";
+import { useAppDispatch, useAppSelector } from "../hooks/redux";
+import MyLoader from "../components/MyLoader"
+import { BASEURL } from "../constants/constants";
 const IndexPage = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+  const divRef = useRef()
   // const [places, setPlaces] = React.useState([]);
   React.useEffect(() => {
     dispatch(fetchPlaces());
   }, []);
 
-  const {isLoading,places,error} = useSelector((state) => state.place);
+  const {isLoading,places,error} = useAppSelector((state) => state.place);
 
   if(isLoading){
-    return <div>загрузка...</div>
+    return <div className="w-[90%] my-5 mx-auto grid  gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+    <MyLoader/>
+    <MyLoader/>
+    <MyLoader/>
+    <MyLoader/>
+    <MyLoader/>
+    <MyLoader/>
+    <MyLoader/>
+    <MyLoader/>
+    </div>
   }
 
   if(error){
-    return <div>Не удалось </div>
+    return <h1 className="flex text-2xl font-bold my-10 justify-center items-center w-full">Не удалось загрузить! Перезагрузите страницу</h1>
   }
+  // sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4
   return (
-    <div className="w-[90%] my-5 mx-auto grid  gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+    <div className="w-[90%] my-5 mx-auto gap-5 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
       {places.length > 0 &&
         places.map((place) => (
           <Link
@@ -29,12 +42,12 @@ const IndexPage = () => {
             className="shadow-xl cursor-pointer hover:shadow-2xl transition-shadow hover:scale-[101%] "
             key={place._id}
           >
-            <div>
+            <div >
               {place.photos.length > 0 && (
                 <div>
                   <img
-                    className="object-cover w-full h-64 rounded-t-lg"
-                    src={"http://localhost:4500/uploads/" + place.photos[0]}
+                    className="object-cover w-full  h-96 md:h-60 rounded-t-lg"
+                    src={`${BASEURL}/uploads/` + place.photos[0]}
                     alt=""
                   />
                 </div>
@@ -43,9 +56,9 @@ const IndexPage = () => {
               <div className="p-2">
                 <div className="text-xl font-bold">{place?.title}</div>
                 <div className="text-sm text-gray-500">{place?.address}</div>
-                <div className="text-md">
+                {/* <div className="text-md">
                   <span className="font-bold">{place?.price}</span>$ per night
-                </div>
+                </div> */}
               </div>
             </div>
           </Link>

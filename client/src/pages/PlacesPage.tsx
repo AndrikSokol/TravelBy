@@ -8,11 +8,12 @@ import { addPlaces } from "../slices/placesSlice";
 import { Dialog, Transition } from "@headlessui/react";
 import { api } from "../services/api";
 import {  IPlaceData } from "../types/place.interface";
+import { useAppDispatch, useAppSelector } from "../hooks/redux";
 
 const PlacesPage = () => {
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
-  const dispatch = useDispatch();
   const [currentPlace, setCurrentPlace] = React.useState<IPlaceData>({}as IPlaceData);
+  const dispatch = useAppDispatch();
   React.useEffect(() => {
     async function fetchData() {
       try {
@@ -47,7 +48,7 @@ const PlacesPage = () => {
     }
   }
 
-  const {isLoading,places,error} = useSelector((state) => state.place);
+  const {isLoading,places,error} = useAppSelector((state) => state.place);
 
   
 
