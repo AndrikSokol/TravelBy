@@ -32,7 +32,7 @@ class UserController {
       const { token } = req.cookies;
       const user = userService.profile(token);
       console.log(...user);
-      res.json(...user);
+      res.json(user);
     } catch (error) {}
   }
 }
