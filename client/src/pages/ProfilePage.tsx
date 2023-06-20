@@ -11,13 +11,12 @@ const ProfilePage = () => {
   const [redirect, setRedirect] = React.useState<string | null>(null);
   const { user, ready, setUser } = React.useContext<IUserContext>(UserContext);
 
-async function logout() {
+  async function logout() {
     try {
       await api.logout();
       setRedirect("/");
-      setUser({}as IUser);
-    } catch (e) {
-    }
+      setUser(null);
+    } catch (e) {}
   }
 
   if (redirect === "/") {
@@ -44,9 +43,12 @@ async function logout() {
     <div>
       <AccountNav />
       <div className="text-center max-w-lg mx-auto">
-        {user !==null && <div>Logged in as {user.username} ({user.email})
-        </div>}
-          
+        {user !== null && (
+          <div>
+            Logged in as {user.username} ({user.email})
+          </div>
+        )}
+
         <button
           onClick={logout}
           className="bg-primary w-full max-w-sm py-2 px-6 mt-4 font-bold text-white rounded-full"

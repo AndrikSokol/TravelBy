@@ -1,73 +1,79 @@
-import axios from "axios"
+import axios from "axios";
 import { BASEURL } from "../constants/constants";
 import { IPlace, IPlaceData } from "../types/place.interface";
 import { IUser, IUserData } from "../types/user.interface";
 
-
 export const instance = axios.create({
-    baseURL: BASEURL,
-    withCredentials: true
-})
-
-
+  baseURL: BASEURL,
+  withCredentials: true,
+});
 
 export const api = {
-    getPlaces: async () : Promise<IPlaceData[]> => {
-        const {data} =  await instance.get<IPlaceData[]>("/places")
-        return data;
-    },
-   
-    authorize: async(email:string,password:string) :Promise<IUserData>=>{
-        const {data} =  await instance.post<IUserData>( "/login" ,  {
-          email,
-          password,
-        },)
-        return data;
-    },
+  getPlaces: async (): Promise<IPlaceData[]> => {
+    const { data } = await instance.get<IPlaceData[]>("/places");
+    return data;
+  },
 
-    registration: async(username :string,email:string,password:string) : Promise<void>=>{
-        await axios.post<IUser>("/registration", {
-            username,
-            email,
-            password,
-          });
-    },
-    getPlace: async (id:string | undefined) : Promise<IPlaceData> => {
-        const {data} =  await instance.get<IPlaceData>(`/place/${id}`);
-        return data;
-    },
+  authorize: async (email: string, password: string): Promise<IUserData> => {
+    const { data } = await instance.post<IUserData>("/login", {
+      email,
+      password,
+    });
+    return data;
+  },
 
-    getPlacesForUser: async ():Promise<IPlaceData[]> => {
-        const {data} =  await instance.get<IPlaceData[]>("/places-for-user");
-        return data;
-    },
+  registration: async (
+    username: string,
+    email: string,
+    password: string
+  ): Promise<IUser> => {
+    const { data } = await instance.post<IUser>("/registration", {
+      username,
+      email,
+      password,
+    });
+    return data;
+  },
+  getPlace: async (id: string | undefined): Promise<IPlaceData> => {
+    const { data } = await instance.get<IPlaceData>(`/place/${id}`);
+    return data;
+  },
 
-    removePlace: async (_id:string) :Promise<string>=> {
-        const {data} =  await instance.put<string>("/place", { _id });
-        return data;
-    },
+  getPlacesForUser: async (): Promise<IPlaceData[]> => {
+    const { data } = await instance.get<IPlaceData[]>("/places-for-user");
+    return data;
+  },
 
-    logout: async():Promise<void>=>{
-        await instance.post("/logout");
-    },
+  removePlace: async (_id: string): Promise<string> => {
+    const { data } = await instance.put<string>("/place", { _id });
+    return data;
+  },
 
-    getProfile: async()=>{
-        const {data} = await instance.get("/profile")
-        return data;
-    },
+  logout: async (): Promise<void> => {
+    await instance.post("/logout");
+  },
 
-    uploadByLink:async(photoLink:string):Promise<string[]>=>{
-        const {data} = await instance.post<string[]>("/upload-by-link", {
-            link: photoLink,
-          });
-        return data;
-    },
+  getProfile: async () => {
+    const { data } = await instance.get("/profile");
+    return data;
+  },
 
-    uploadByDevice: async(photos:string[]): Promise<string[]>=>{
-        const {data} = await instance.post<string[]>("/upload-by-device", photos, {
+  uploadByLink: async (photoLink: string): Promise<string[]> => {
+    const { data } = await instance.post<string[]>("/upload-by-link", {
+      link: photoLink,
+    });
+    return data;
+  },
+
+  uploadByDevice: async (photos: string[]): Promise<string[]> => {
+    const { data } = await instance.post<string[]>(
+      "/upload-by-device",
+      photos,
+      {
         headers: { "Content-Type": "multipart/form-data" },
-      });
+      }
+    );
 
-      return data;
-    }
-}
+    return data;
+  },
+};

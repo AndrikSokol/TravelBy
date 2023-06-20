@@ -1,24 +1,25 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import AccountNav from "../components/AccountNav";
-import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { deletePlace } from "../slices/placesSlice";
+import { deletePlace, fetchPlacesForUser } from "../slices/placesSlice";
 import { addPlaces } from "../slices/placesSlice";
 import { Dialog, Transition } from "@headlessui/react";
 import { api } from "../services/api";
-import {  IPlaceData } from "../types/place.interface";
+import { IPlaceData } from "../types/place.interface";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
+import MyLoader from "../components/MyLoader";
 
 const PlacesPage = () => {
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
-  const [currentPlace, setCurrentPlace] = React.useState<IPlaceData>({}as IPlaceData);
+  const [currentPlace, setCurrentPlace] = React.useState<IPlaceData>(
+    {} as IPlaceData
+  );
   const dispatch = useAppDispatch();
   React.useEffect(() => {
     async function fetchData() {
       try {
-        const data  = await api.getPlacesForUser();
-        dispatch(addPlaces(data));
+        dispatch(fetchPlacesForUser());
       } catch (error) {
         console.log("not Found " + error);
       }
@@ -32,14 +33,14 @@ const PlacesPage = () => {
   //   }
   // }, [isOpen]);
 
-  function handleModal(place : IPlaceData) {
+  function handleModal(place: IPlaceData) {
     setIsOpen(true);
     setCurrentPlace(place);
   }
   async function removePlace() {
     try {
       const { _id } = currentPlace;
-      const data = await api.removePlace(_id)
+      const data = await api.removePlace(_id);
       dispatch(deletePlace(data));
       alert("succesfull delete");
       setIsOpen(false);
@@ -48,10 +49,25 @@ const PlacesPage = () => {
     }
   }
 
-  const {isLoading,places,error} = useAppSelector((state) => state.place);
+  const { placesForUser, isLoading, error } = useAppSelector(
+    (state) => state.place
+  );
 
-  
+  if (isLoading) {
+    return (
+      <div className=" sm:flex  sm:gap-4 sm:justify-between  p-3 my-2 items-center rounded-lg">
+        <MyLoader />
+      </div>
+    );
+  }
 
+  if (error) {
+    return (
+      <h1 className="flex text-2xl font-bold my-10 justify-center items-center w-full">
+        Не удалось загрузить! Перезагрузите страницу
+      </h1>
+    );
+  }
   return (
     <div>
       <Dialog
@@ -78,7 +94,7 @@ const PlacesPage = () => {
 
       <AccountNav />
       <div className="w-full lg:w-[80%] mx-auto">
-        {places !== undefined && (
+        {placesForUser !== undefined && (
           <div>
             <div className="text-center font-bold  text-lg lg:text-xl">
               {" "}
@@ -86,8 +102,8 @@ const PlacesPage = () => {
             </div>
 
             <div>
-              {places.length > 0 &&
-                places.map((place) => (
+              {placesForUser.length > 0 &&
+                placesForUser.map((place) => (
                   <div
                     className="sm:flex  sm:gap-4 sm:justify-between shadow p-3 my-2 items-center rounded-lg"
                     key={place._id}

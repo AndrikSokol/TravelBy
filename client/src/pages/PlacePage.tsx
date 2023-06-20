@@ -12,7 +12,7 @@ const PlacePage = () => {
   React.useEffect(() => {
     async function fetchPlace() {
       try {
-        const  place  = await api.getPlace(id);
+        const place = await api.getPlace(id);
         setPlace(place);
       } catch (error) {
         console.log(error);
@@ -168,6 +168,57 @@ const PlacePage = () => {
                 </div>
               </div>
             </div> */}
+            <div className="grid grid-rows-3 grid-flow-col gap-4">
+              <div className="row-span-3">
+                {place.photos?.[0] && (
+                  <div className="">
+                    <img
+                      className="object-cover"
+                      src={"http://localhost:4500/uploads/" + place.photos[0]}
+                      alt=""
+                    />
+                  </div>
+                )}
+              </div>
+              <div className="col-span-2">
+                {place.photos?.[1] && (
+                  <img
+                    className="object-cover"
+                    src={"http://localhost:4500/uploads/" + place.photos[1]}
+                    alt=""
+                  />
+                )}
+              </div>
+              <div className="row-span-2 col-span-2 relative overflow-hidden">
+                {place.photos?.[2] && (
+                  <img
+                    className="object-cover"
+                    src={"http://localhost:4500/uploads/" + place.photos[2]}
+                    alt=""
+                  />
+                )}
+                <button
+                  onClick={() => setShowAllPhotos(true)}
+                  className="flex  gap-1 absolute bottom-2 right-2 py-2 px-4 bg-white rounded-2xl ahadow shadow-md hover:scale-[102%] ease-in-out "
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="currentColor"
+                    className="w-6 h-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
+                    />
+                  </svg>
+                  Show more photos
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
@@ -181,12 +232,12 @@ const PlacePage = () => {
           Check-out: {place?.checkOut} <br />
           Max number of guests: {place?.maxGuests} <br />
         </div>
-        <div className="sm:w-[250px] overflow-hidden shadow sm:text-xl gap-1 bg-gray-300 flex flex-col items-center justify-center rounded-2xl">
+        {/* <div className="sm:w-[250px] overflow-hidden shadow sm:text-xl gap-1 bg-gray-300 flex flex-col items-center justify-center rounded-2xl">
           <div>Price: {place?.price}$ / per night</div>
           <button className="bg-primary p-1 text-white rounded-2xl w-full">
             Book this place
           </button>
-        </div>
+        </div> */}
       </div>
     </div>
   );

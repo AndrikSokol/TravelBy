@@ -3,28 +3,38 @@ import { api, instance } from "../services/api";
 import { IPlaceData } from "../types/place.interface";
 
 interface placesState {
-  places: IPlaceData[],
-  isLoading: boolean
-  error:string
+  places: IPlaceData[];
+  placesForUser: IPlaceData[];
+  isLoading: boolean;
+  error: string;
 }
-const initialState:placesState = {
+const initialState: placesState = {
   places: [],
-  isLoading : false,
-  error:'',
+  placesForUser: [],
+  isLoading: false,
+  error: "",
 };
 
- export const fetchPlaces= createAsyncThunk(
-   "places",
-     async(_,thunkAPI)=>{
-      try {
-        const data =  await api.getPlaces();
-        return data;
-      } catch (error) {
-        return thunkAPI.rejectWithValue(error);
-      }
-      
-     }
- )
+export const fetchPlaces = createAsyncThunk("places", async (_, thunkAPI) => {
+  try {
+    const data = await api.getPlaces();
+    return data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+});
+
+export const fetchPlacesForUser = createAsyncThunk(
+  "placesForUser",
+  async (_, thunkAPI) => {
+    try {
+      const data = await api.getPlacesForUser();
+      return data;
+    } catch (error) {
+      thunkAPI.rejectWithValue(error);
+    }
+  }
+);
 
 export const placesSlice = createSlice({
   name: "places",
@@ -32,29 +42,40 @@ export const placesSlice = createSlice({
   reducers: {
     addPlaces: (state, action) => {
       // state.places.push(action.payload);
-      state.places = action.payload;
+      state.placesForUser = action.payload;
     },
 
     deletePlace: (state, action) => {
-      state.places = state.places.filter(
+      state.placesForUser = state.placesForUser.filter(
         (place) => place._id !== action.payload
       );
     },
   },
-  extraReducers:{
-    [fetchPlaces.fulfilled.type]:(state,action)=>{
+  extraReducers: {
+    [fetchPlaces.fulfilled.type]: (state, action) => {
       state.isLoading = false;
       state.places = action.payload;
     },
-    [fetchPlaces.pending.type]:(state,action)=>{
+    [fetchPlaces.pending.type]: (state, action) => {
       state.isLoading = true;
     },
-    [fetchPlaces.rejected.type] :(state,action)=>{
+    [fetchPlaces.rejected.type]: (state, action) => {
       state.isLoading = false;
-     state.error = action.error
-    }
-  }
-  
+      state.error = action.error;
+    },
+
+    [fetchPlacesForUser.fulfilled.type]: (state, action) => {
+      state.isLoading = false;
+      state.placesForUser = action.payload;
+    },
+    [fetchPlacesForUser.pending.type]: (state, action) => {
+      state.isLoading = true;
+    },
+    [fetchPlacesForUser.rejected.type]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.error;
+    },
+  },
 });
 
 export const { addPlaces, deletePlace } = placesSlice.actions;

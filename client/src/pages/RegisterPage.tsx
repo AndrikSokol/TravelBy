@@ -1,19 +1,25 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import axios from "axios";
+import { Link, Navigate } from "react-router-dom";
 import { api } from "../services/api";
+import { IUserContext } from "../types/user.interface";
+import { UserContext } from "../context/UserContext";
 
 const RegisterPage = () => {
   const [username, setUsername] = React.useState<string>("");
   const [email, setEmail] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
+  const { user, ready, setUser } = React.useContext<IUserContext>(UserContext);
+
+  if (user && ready) {
+    return <Navigate to="/" />;
+  }
 
   async function registerUser(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     try {
-      await api.registration(username,email,password)
-    } catch (e) {
-    }
+      const userDoc = await api.registration(username, email, password);
+      setUser(userDoc);
+    } catch (e) {}
   }
 
   return (
