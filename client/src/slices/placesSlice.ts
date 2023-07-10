@@ -41,7 +41,6 @@ export const placesSlice = createSlice({
   initialState,
   reducers: {
     addPlaces: (state, action) => {
-      // state.places.push(action.payload);
       state.placesForUser = action.payload;
     },
 
@@ -49,6 +48,10 @@ export const placesSlice = createSlice({
       state.placesForUser = state.placesForUser.filter(
         (place) => place._id !== action.payload
       );
+    },
+
+    deletePlacesForUser: (state) => {
+      state.placesForUser = [];
     },
   },
   extraReducers: {
@@ -78,5 +81,6 @@ export const placesSlice = createSlice({
   },
 });
 
-export const { addPlaces, deletePlace } = placesSlice.actions;
+export const { addPlaces, deletePlace, deletePlacesForUser } =
+  placesSlice.actions;
 export default placesSlice.reducer;

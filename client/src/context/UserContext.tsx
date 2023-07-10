@@ -13,16 +13,17 @@ export const UserContextProvider: FC<UserContextProviderProps> = ({
   children,
 }) => {
   const [user, setUser] = useState<IUser | null>(null);
+
   const [ready, setReady] = useState<boolean>(false);
 
   useEffect(() => {
     async function fetchUser() {
-      if (user === null) {
-        const userDoc = await api.getProfile();
-        console.log("uuuser " + userDoc);
-        setUser(userDoc);
-        setReady(true);
-      }
+      // if (user === null) {
+      //   const userDoc = await api.getProfile();
+      //   console.log("uuuser " + userDoc);
+      //   setUser(userDoc);
+      //   setReady(true);
+      // }
     }
     fetchUser();
   }, []);

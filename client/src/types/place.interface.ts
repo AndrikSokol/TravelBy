@@ -7,10 +7,9 @@ export interface IPlace{
     description:string,
     perks:string[],
     extraInfo:string,
-    checkIn:number,
-    checkOut:number,
-    maxGuests:number,
-    price:number
+    checkIn:string,
+    checkOut:string,
+    maxGuests:string,
 }
 
 export interface IPlaceData  extends IPlace{

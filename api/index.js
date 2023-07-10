@@ -7,6 +7,7 @@ require("dotenv").config();
 const app = express();
 
 const router = require("./router/index.js");
+const errorMiddleware = require("./middlewares/errorMiddleware.js");
 
 const PORT = process.env.PORT || 4000;
 
@@ -20,6 +21,7 @@ app.use(
   })
 );
 app.use(router);
+app.use(errorMiddleware);
 
 mongoose
   .connect(process.env.MONGO_URL)

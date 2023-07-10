@@ -8,8 +8,6 @@ import MyLoader from "../components/MyLoader";
 import { BASEURL } from "../constants/constants";
 const IndexPage = () => {
   const dispatch = useAppDispatch();
-  const divRef = useRef();
-  // const [places, setPlaces] = React.useState([]);
   React.useEffect(() => {
     dispatch(fetchPlaces());
   }, []);
@@ -18,7 +16,9 @@ const IndexPage = () => {
 
   if (isLoading) {
     return (
-      <div className=" my-5 mx-auto grid  gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <div className="sm:w-[85%] my-5 mx-auto grid  gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
+        <MyLoader />
+        <MyLoader />
         <MyLoader />
         <MyLoader />
         <MyLoader />
@@ -32,30 +32,17 @@ const IndexPage = () => {
   }
 
   if (error) {
-    return (
-      <h1 className="flex text-2xl font-bold my-10 justify-center items-center w-full">
-        Не удалось загрузить! Перезагрузите страницу
-      </h1>
-    );
+    return <h1 className="flex text-2xl font-bold my-10 justify-center items-center w-full">Не удалось загрузить! Перезагрузите страницу</h1>;
   }
-  // sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4
   return (
-    <div className="my-5 mx-auto gap-5 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+    <div className="sm:w-[85%] p-4 my-5 mx-auto gap-5 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
       {places.length > 0 &&
         places.map((place) => (
-          <Link
-            to={"/place/" + place._id}
-            className="shadow-xl cursor-pointer hover:shadow-2xl transition-shadow hover:scale-[101%] "
-            key={place._id}
-          >
+          <Link to={"/place/" + place._id} className="shadow-xl cursor-pointer hover:shadow-2xl transition-shadow hover:scale-[101%] " key={place._id}>
             <div className="flex flex-col">
               {place.photos.length > 0 && (
                 <div>
-                  <img
-                    className="object-cover h-72 w-full rounded-t-lg "
-                    src={`${BASEURL}/uploads/` + place.photos[0]}
-                    alt=""
-                  />
+                  <img className="object-cover h-72 w-full rounded-t-lg " src={`${BASEURL}/uploads/` + place.photos[0]} alt="" />
                 </div>
               )}
 

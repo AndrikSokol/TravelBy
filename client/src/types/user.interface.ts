@@ -1,7 +1,6 @@
 export interface IUser {
+  id: string;
   username: string;
-  password: string;
-
   email: string;
 }
 
@@ -11,6 +10,8 @@ export interface IUserContext {
   ready: boolean;
 }
 
-export interface IUserData extends IUser {
-  _id: string;
+export interface IUserData {
+  user: IUser;
+  accessToken: string;
+  refreshToken: string;
 }

@@ -6,16 +6,22 @@ import axios from "axios";
 import AccountNav from "../components/AccountNav";
 import { api } from "../services/api";
 import { IUser, IUserContext } from "../types/user.interface";
+import { useAppDispatch, useAppSelector } from "../hooks/redux";
+import { deletePlacesForUser } from "../slices/placesSlice";
+import { deleteUser } from "../slices/userSlice";
 
 const ProfilePage = () => {
   const [redirect, setRedirect] = React.useState<string | null>(null);
-  const { user, ready, setUser } = React.useContext<IUserContext>(UserContext);
+  const dispatch = useAppDispatch();
+  const { setAuth, user } = useAppSelector((state) => state.user);
 
   async function logout() {
     try {
       await api.logout();
+      localStorage.removeItem("token");
       setRedirect("/");
-      setUser(null);
+      dispatch(deleteUser());
+      dispatch(deletePlacesForUser());
     } catch (e) {}
   }
 
@@ -23,7 +29,7 @@ const ProfilePage = () => {
     return <Navigate to="/" />;
   }
 
-  if (!ready && !user) {
+  if (!setAuth && !user) {
     return (
       <div className={style.loading}>
         <span></span>
@@ -35,7 +41,7 @@ const ProfilePage = () => {
     );
   }
 
-  if (user === null && ready && !redirect) {
+  if (!user && setAuth && !redirect) {
     return <Navigate to="/login" />;
   }
 
@@ -49,10 +55,7 @@ const ProfilePage = () => {
           </div>
         )}
 
-        <button
-          onClick={logout}
-          className="bg-primary w-full max-w-sm py-2 px-6 mt-4 font-bold text-white rounded-full"
-        >
+        <button onClick={logout} className="bg-primary w-full max-w-sm py-2 px-6 mt-4 font-bold text-white rounded-full">
           Logout
         </button>
       </div>

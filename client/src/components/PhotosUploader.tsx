@@ -4,17 +4,17 @@ import { api } from "../services/api";
 import { BASEURL } from "../constants/constants";
 
 type PhotosUploaderProps  = {
-  addedPhotos: string[]
+  addedPhotos: string[] 
   onChange:  React.Dispatch<React.SetStateAction<string[]>>
 }
 const PhotosUploader:FC<PhotosUploaderProps> = ({ addedPhotos, onChange }) => {
-  const [photoLink, setPhotoLink] = React.useState<string>();
+  const [photoLink, setPhotoLink] = React.useState<string>('');
 
   async function addPhotoByLink(ev :React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     try {
       ev.preventDefault();
       const filename  = await api.uploadByLink(photoLink)
-      onChange((prev) => [...prev, filename]);
+      onChange((prev:string[]) => [...prev, filename]);
       setPhotoLink("");
       alert("photo added");
     } catch (err) {
@@ -33,7 +33,7 @@ const PhotosUploader:FC<PhotosUploaderProps> = ({ addedPhotos, onChange }) => {
     }
     try {
       const filenames = await api.uploadByDevice(data)
-      onChange((prev) => [...prev, ...filenames]);
+      onChange((prev:string[]) => [...prev, ...filenames]);
       alert("succesfull for upload by device");
     } catch (error) {
       alert("error for upload by device");

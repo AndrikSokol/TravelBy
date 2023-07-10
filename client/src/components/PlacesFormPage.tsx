@@ -6,32 +6,38 @@ import AccountNav from "./AccountNav";
 import { Navigate, useParams } from "react-router";
 import { useSelector } from "react-redux";
 import { useAppSelector } from "../hooks/redux";
+import { IPlace, IPlaceData } from "../types/place.interface";
+import { api } from "../services/api";
 
 const PlacesFormPage = () => {
   const { id } = useParams();
   const [title, setTitle] = React.useState<string>("");
   const [address, setAddress] = React.useState<string>("");
-  const [addedPhotos, setAddedPhotos] = React.useState<[]>([]);
+  const [addedPhotos, setAddedPhotos] = React.useState<string[]>([] as string[]);
   const [description, setDescription] = React.useState<string>("");
-  const [perks, setPerks] = React.useState<[]>([]);
+  const [perks, setPerks] = React.useState<string[]>([] as string[]);
   const [extraInfo, setExtraInfo] = React.useState<string>("");
-  const [checkIn, setCheckIn] = React.useState<number | null>(null);
-  const [checkOut, setCheckOut] = React.useState<number | null>(null);
-  const [maxGuests, setMaxGuests] = React.useState<number>(1);
+  const [checkIn, setCheckIn] = React.useState<string>('');
+  const [checkOut, setCheckOut] = React.useState<string >('');
+  const [maxGuests, setMaxGuests] = React.useState<string>("1");
   const [redirect, setRedirect] = React.useState<boolean>(false);
-  const [price, setPrice] = React.useState(0);
+ 
   const places = useAppSelector((state) => state.place.places);
 
   React.useEffect(() => {
     if (!id) {
       return;
     }
-    const place = places.filter((place) => place._id === id);
-    setState(...place);
-    console.log(places);
+    const place = places.find((place:IPlaceData) => place._id === id);
+    if(place){
+      setState(place);
+      console.log(places);
+    }
+   
+    
   }, [id]);
 
-  const setState = (place) => {
+  const setState = (place: IPlaceData) => {
     setTitle(place.title);
     setAddress(place.address);
     setAddedPhotos(place.photos);
@@ -41,32 +47,25 @@ const PlacesFormPage = () => {
     setCheckIn(place.checkIn);
     setCheckOut(place.checkOut);
     setMaxGuests(place.maxGuests);
-    setPrice(place.price);
   };
-  function savePlace(event) {
+  function savePlace(event :React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const placeData = {
       title,
       address,
-      addedPhotos,
+      photos: addedPhotos,
       description,
       perks,
       extraInfo,
       checkIn,
       checkOut,
       maxGuests,
-      price,
     };
     try {
       if (id) {
-        axios.put("/places", {
-          id,
-          ...placeData,
-        });
+        api.editPlace(id,placeData)
       } else {
-        axios.post("/place", {
-          ...placeData,
-        });
+       api.addPlace(placeData);
       }
 
       clearState();
@@ -88,10 +87,9 @@ const PlacesFormPage = () => {
     setDescription("");
     setPerks([]);
     setExtraInfo("");
-    setCheckIn(null);
-    setCheckOut(null);
-    setMaxGuests(1);
-    setPrice(0);
+    setCheckIn('');
+    setCheckOut('');
+    setMaxGuests('1');
   };
 
   return (
@@ -168,18 +166,6 @@ const PlacesFormPage = () => {
               onChange={(ev) => setMaxGuests(ev.target.value)}
               className="MyInput"
               type="number"
-            />
-          </div>
-        </div>
-        <div>
-          <h2 className="text-2xl mt-4">Price per night</h2>
-          <div>
-            <input
-              className="MyInput"
-              value={price}
-              onChange={(ev) => setPrice(ev.target.value)}
-              type="number"
-              placeholder="100$"
             />
           </div>
         </div>

@@ -14,8 +14,8 @@ const PlacePage = () => {
       try {
         const place = await api.getPlace(id);
         setPlace(place);
-      } catch (error) {
-        console.log(error);
+      } catch (e) {
+        console.log(e.respose?.data?.message);
       }
     }
     fetchPlace();
@@ -24,28 +24,12 @@ const PlacePage = () => {
   if (showAllPhotos) {
     return (
       <div className=" px-8 py-2 absolute inset-0 bg-white  min-h-screen">
-        <h2 className="w-full text-center text-2xl mb-2 ">
-          Photos of {place.title}
-        </h2>
+        <h2 className="w-full text-center text-2xl mb-2 ">Photos of {place.title}</h2>
         <div className="mb-8">
-          <button
-            className="fixed top-12 gap-1 right-2 px-2 py-2 shadow-lg items-center flex justify-between bg-primary text-white rounded-2xl "
-            onClick={() => setShowAllPhotos(false)}
-          >
+          <button className="fixed top-12 gap-1 right-2 px-2 py-2 shadow-lg items-center flex justify-between bg-primary text-white rounded-2xl " onClick={() => setShowAllPhotos(false)}>
             <div>Close Photos</div>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-              className="w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </button>
         </div>
@@ -54,11 +38,7 @@ const PlacePage = () => {
           {place?.photos?.length > 0 &&
             place.photos.map((photo) => (
               <div className="w-full flex justify-center">
-                <img
-                  className="rounded-sm"
-                  src={`http://localhost:4500/uploads/` + photo}
-                  alt=""
-                />
+                <img className="rounded-sm" src={`http://localhost:4500/uploads/` + photo} alt="" />
               </div>
             ))}
         </div>
@@ -72,23 +52,12 @@ const PlacePage = () => {
           <div className="flex flex-col">
             <div className="text-xl font-bold">{place.title}</div>
             <div className="flex justify-between  gap-4 py-2">
-              <a
-                target="_blank"
-                href={`https://maps.google.com/?q=` + place.address}
-                className="flex gap-2 items-center"
-              >
+              <a target="_blank" href={`https://maps.google.com/?q=` + place.address} className="flex gap-2 items-center">
                 <MdPlace /> {place.address}
               </a>
               <div className="flex gap-3">
                 <div className="flex gap-2 cursor-pointer hover:scale-[103%]">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    className="w-6 h-6 "
-                  >
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6 ">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -98,19 +67,8 @@ const PlacePage = () => {
                   <h2 className="text-md ">Share</h2>
                 </div>
                 <div className="flex gap-2 cursor-pointer hover:scale-[103%]">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    className="w-6 h-6 cursor-pointer"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
-                    />
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6 cursor-pointer">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
                   </svg>
                   <h2 className="text-md ">Save</h2>
                 </div>
@@ -172,43 +130,15 @@ const PlacePage = () => {
               <div className="row-span-3">
                 {place.photos?.[0] && (
                   <div className="">
-                    <img
-                      className="object-cover"
-                      src={"http://localhost:4500/uploads/" + place.photos[0]}
-                      alt=""
-                    />
+                    <img className="object-cover" src={"http://localhost:4500/uploads/" + place.photos[0]} alt="" />
                   </div>
                 )}
               </div>
-              <div className="col-span-2">
-                {place.photos?.[1] && (
-                  <img
-                    className="object-cover"
-                    src={"http://localhost:4500/uploads/" + place.photos[1]}
-                    alt=""
-                  />
-                )}
-              </div>
+              <div className="col-span-2">{place.photos?.[1] && <img className="object-cover" src={"http://localhost:4500/uploads/" + place.photos[1]} alt="" />}</div>
               <div className="row-span-2 col-span-2 relative overflow-hidden">
-                {place.photos?.[2] && (
-                  <img
-                    className="object-cover"
-                    src={"http://localhost:4500/uploads/" + place.photos[2]}
-                    alt=""
-                  />
-                )}
-                <button
-                  onClick={() => setShowAllPhotos(true)}
-                  className="flex  gap-1 absolute bottom-2 right-2 py-2 px-4 bg-white rounded-2xl ahadow shadow-md hover:scale-[102%] ease-in-out "
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.5"
-                    stroke="currentColor"
-                    className="w-6 h-6"
-                  >
+                {place.photos?.[2] && <img className="object-cover" src={"http://localhost:4500/uploads/" + place.photos[2]} alt="" />}
+                <button onClick={() => setShowAllPhotos(true)} className="flex  gap-1 absolute bottom-2 right-2 py-2 px-4 bg-white rounded-2xl ahadow shadow-md hover:scale-[102%] ease-in-out ">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"

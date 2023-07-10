@@ -3,11 +3,12 @@ const placeService = require("../services/place-service");
 class PlaceController {
   async findUserPlaces(req, res, next) {
     try {
-      const { token } = req.cookies;
-      const places = await placeService.findUserPlaces(token);
+      const user = req.user;
+      console.log(user);
+      const places = await placeService.findUserPlaces(user.id);
       return res.json(places);
     } catch (error) {
-      console.log(error);
+      next(error);
     }
   }
   async getPlace(req, res, next) {
@@ -16,40 +17,40 @@ class PlaceController {
       const place = await placeService.getPlace(id);
       return res.json(place);
     } catch (error) {
-      console.log(error);
+      next(error);
     }
   }
 
   async addPlace(req, res, next) {
     try {
-      const { token } = req.cookies;
+      const { id } = req.user;
       const place = req.body;
-      const placeDoc = await placeService.addPlace(token, place);
+      const placeDoc = await placeService.addPlace(id, place);
       res.json(placeDoc);
     } catch (error) {
-      console.log(error);
+      next(error);
     }
   }
 
   async removePlace(req, res, next) {
     try {
-      const { token } = req.cookies;
+      const userData = req.user;
       const { _id } = req.body;
-      const id = await placeService.removePlace(token, _id);
+      const id = await placeService.removePlace(_id, userData);
       res.json(id);
     } catch (error) {
-      console.log(error);
+      next(error);
     }
   }
 
   async editPlace(req, res, next) {
     try {
-      const { token } = req.cookies;
+      const userData = req.user;
       const place = req.body;
-      const status = await placeService.editPlace(token, place);
+      const status = await placeService.editPlace(userData, place);
       res.json(status);
     } catch (error) {
-      console.log(error);
+      next(error);
     }
   }
 
@@ -58,7 +59,7 @@ class PlaceController {
       const places = await placeService.getPlaces();
       res.json(places);
     } catch (error) {
-      console.log(error);
+      next(error);
     }
   }
 }
