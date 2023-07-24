@@ -3,18 +3,20 @@ import React, { FC } from "react";
 import { api } from "../services/api";
 import { BASEURL } from "../constants/constants";
 
-type PhotosUploaderProps  = {
-  addedPhotos: string[] 
-  onChange:  React.Dispatch<React.SetStateAction<string[]>>
-}
-const PhotosUploader:FC<PhotosUploaderProps> = ({ addedPhotos, onChange }) => {
-  const [photoLink, setPhotoLink] = React.useState<string>('');
+type PhotosUploaderProps = {
+  addedPhotos: string[];
+  onChange: React.Dispatch<React.SetStateAction<string[]>>;
+};
+const PhotosUploader: FC<PhotosUploaderProps> = ({ addedPhotos, onChange }) => {
+  const [photoLink, setPhotoLink] = React.useState<string>("");
 
-  async function addPhotoByLink(ev :React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+  async function addPhotoByLink(
+    ev: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) {
     try {
       ev.preventDefault();
-      const filename  = await api.uploadByLink(photoLink)
-      onChange((prev:string[]) => [...prev, filename]);
+      const filename = await api.uploadByLink(photoLink);
+      onChange((prev: string[]) => [...prev, filename]);
       setPhotoLink("");
       alert("photo added");
     } catch (err) {
@@ -22,45 +24,51 @@ const PhotosUploader:FC<PhotosUploaderProps> = ({ addedPhotos, onChange }) => {
     }
   }
 
-  async function uploadPhoto(ev:React.ChangeEvent<HTMLInputElement>) {
+  async function uploadPhoto(ev: React.ChangeEvent<HTMLInputElement>) {
     const files = ev.target.files;
-    if(files === null){
-      return  alert("Добавьте фото")
+    if (files === null) {
+      return alert("Добавьте фото");
     }
     const data = new FormData();
     for (let i = 0; i < files.length; i++) {
       data.append("photos", files[i]);
     }
     try {
-      const filenames = await api.uploadByDevice(data)
-      onChange((prev:string[]) => [...prev, ...filenames]);
+      const filenames = await api.uploadByDevice(data);
+      onChange((prev: string[]) => [...prev, ...filenames]);
       alert("succesfull for upload by device");
     } catch (error) {
       alert("error for upload by device");
     }
   }
 
-  const removePhoto = (event:React.MouseEvent<HTMLButtonElement, MouseEvent>, filename:string):void => {
+  const removePhoto = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    filename: string
+  ): void => {
     event.preventDefault();
     onChange([...addedPhotos.filter((photo) => photo !== filename)]);
   };
 
-  const selectAsMainPhoto = (event:React.MouseEvent<HTMLButtonElement, MouseEvent>, filename:string) :void => {
+  const selectAsMainPhoto = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    filename: string
+  ): void => {
     event.preventDefault();
     onChange([filename, ...addedPhotos.filter((photo) => photo !== filename)]);
   };
 
   return (
     <>
-      <h2 className="text-2xl lg:text-3xl mt-4">Photos</h2>
-      <p className="text-gray-500 text-sm">more = better</p>
+      <h2 className="text-2xl lg:text-3xl mt-4">Фото</h2>
+      <p className="text-gray-500 text-sm">больше = лучше</p>
       <div className="flex gap-2 ">
         <div className="MyInput ">
           <input
             value={photoLink}
             onChange={(ev) => setPhotoLink(ev.target.value)}
             type="text"
-            placeholder={"Add using a link ...jpg"}
+            placeholder={"Добавьте с помощью ссылки ...jpg"}
           />
         </div>
         <div className="flex py-2">
@@ -68,7 +76,7 @@ const PhotosUploader:FC<PhotosUploaderProps> = ({ addedPhotos, onChange }) => {
             onClick={addPhotoByLink}
             className="bg-gray-200 px-4 rounded-xl hover:opacity-90 transition-opacity"
           >
-            Add&nbsp;photo
+            добавить&nbsp;фото
           </button>
         </div>
       </div>
@@ -162,7 +170,7 @@ const PhotosUploader:FC<PhotosUploaderProps> = ({ addedPhotos, onChange }) => {
               d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
             />
           </svg>
-          Upload
+          Загрузить
         </label>
       </div>
     </>
