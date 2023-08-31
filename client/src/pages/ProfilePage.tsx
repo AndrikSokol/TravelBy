@@ -51,12 +51,15 @@ const ProfilePage = () => {
       <div className="text-center max-w-lg mx-auto">
         {user !== null && (
           <div>
-            Logged in as {user.username} ({user.email})
+            Зашёл под пользователем: {user.username} ({user.email})
           </div>
         )}
 
-        <button onClick={logout} className="bg-primary w-full max-w-sm py-2 px-6 mt-4 font-bold text-white rounded-full">
-          Logout
+        <button
+          onClick={logout}
+          className="bg-primary w-full max-w-sm py-2 px-6 mt-4 font-bold text-white rounded-full"
+        >
+          Выйти
         </button>
       </div>
     </div>

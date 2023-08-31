@@ -13,28 +13,28 @@ const PlacesFormPage = () => {
   const { id } = useParams();
   const [title, setTitle] = React.useState<string>("");
   const [address, setAddress] = React.useState<string>("");
-  const [addedPhotos, setAddedPhotos] = React.useState<string[]>([] as string[]);
+  const [addedPhotos, setAddedPhotos] = React.useState<string[]>(
+    [] as string[]
+  );
   const [description, setDescription] = React.useState<string>("");
   const [perks, setPerks] = React.useState<string[]>([] as string[]);
   const [extraInfo, setExtraInfo] = React.useState<string>("");
-  const [checkIn, setCheckIn] = React.useState<string>('');
-  const [checkOut, setCheckOut] = React.useState<string >('');
+  const [checkIn, setCheckIn] = React.useState<string>("");
+  const [checkOut, setCheckOut] = React.useState<string>("");
   const [maxGuests, setMaxGuests] = React.useState<string>("1");
   const [redirect, setRedirect] = React.useState<boolean>(false);
- 
+
   const places = useAppSelector((state) => state.place.places);
 
   React.useEffect(() => {
     if (!id) {
       return;
     }
-    const place = places.find((place:IPlaceData) => place._id === id);
-    if(place){
+    const place = places.find((place: IPlaceData) => place._id === id);
+    if (place) {
       setState(place);
       console.log(places);
     }
-   
-    
   }, [id]);
 
   const setState = (place: IPlaceData) => {
@@ -48,7 +48,7 @@ const PlacesFormPage = () => {
     setCheckOut(place.checkOut);
     setMaxGuests(place.maxGuests);
   };
-  function savePlace(event :React.FormEvent<HTMLFormElement>) {
+  function savePlace(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const placeData = {
       title,
@@ -63,9 +63,9 @@ const PlacesFormPage = () => {
     };
     try {
       if (id) {
-        api.editPlace(id,placeData)
+        api.editPlace(id, placeData);
       } else {
-       api.addPlace(placeData);
+        api.addPlace(placeData);
       }
 
       clearState();
@@ -87,60 +87,61 @@ const PlacesFormPage = () => {
     setDescription("");
     setPerks([]);
     setExtraInfo("");
-    setCheckIn('');
-    setCheckOut('');
-    setMaxGuests('1');
+    setCheckIn("");
+    setCheckOut("");
+    setMaxGuests("1");
   };
 
   return (
     <div>
       <AccountNav />
       <form className="w-[80%] lg:w-[60%] mx-auto" onSubmit={savePlace}>
-        <h2 className="text-2xl lg:text-3xl mt-4">Title</h2>
+        <h2 className="text-2xl lg:text-3xl mt-4">Заголовок</h2>
         <p className="text-gray-500 text-sm">
-          title for your place/ Should be short and catchy as in advertisment
+          Название заведения, которое вы посетили
         </p>
         <div className="MyInput">
           <input
             value={title}
             onChange={(ev) => setTitle(ev.target.value)}
             type="text"
-            placeholder="title"
+            placeholder="заголовок"
           />
         </div>
 
-        <h2 className="text-2xl lg:text-3xl mt-4">Address</h2>
-        <p className="text-gray-500 text-sm">Address to this place</p>
+        <h2 className="text-2xl lg:text-3xl mt-4">Адрес</h2>
+        <p className="text-gray-500 text-sm">Адрес заведения</p>
         <div className="MyInput">
           <input
             value={address}
             onChange={(ev) => setAddress(ev.target.value)}
             type="text"
-            placeholder="address"
+            placeholder="адрес"
           />
         </div>
         <PhotosUploader addedPhotos={addedPhotos} onChange={setAddedPhotos} />
-        <h2 className="text-2xl lg:text-3xl mt-4">Description</h2>
-        <p className="text-gray-500 text-sm">description of the place</p>
+        <h2 className="text-2xl lg:text-3xl mt-4">Описание</h2>
+        <p className="text-gray-500 text-sm">Опишите данное место</p>
         <textarea
           value={description}
           onChange={(ev) => setDescription(ev.target.value)}
         ></textarea>
         <Perks selected={perks} onChange={setPerks} />
-        <h2 className="text-2xl mt-4">Extra info</h2>
-        <p className="text-gray-500 text-sm">house rules, etc</p>
+        <h2 className="text-2xl mt-4">
+          Дополнительная информация(необязательно)
+        </h2>
+        <p className="text-gray-500 text-sm">Правила и другое...</p>
         <textarea
           value={extraInfo}
           onChange={(ev) => setExtraInfo(ev.target.value)}
         ></textarea>
-        <h2 className="text-2xl mt-4">Check in&out times</h2>
+        <h2 className="text-2xl mt-4">Время прибытия | Время выездаs</h2>
         <p className="text-gray-500 text-sm">
-          add check in and out times, remember to have some time window for
-          cleaning the room between guests
+          Добавьте время прибытия и время отъезда
         </p>
         <div className="grid gap-2 sm:grid-cols-3">
           <div>
-            <h3 className="mt-2 -mb-1">Check in time</h3>
+            <h3 className="mt-2 -mb-1">Время прибытия</h3>
             <input
               value={checkIn}
               onChange={(ev) => setCheckIn(ev.target.value)}
@@ -150,7 +151,7 @@ const PlacesFormPage = () => {
             />
           </div>
           <div>
-            <h3 className="mt-2 -mb-1">Check out time</h3>
+            <h3 className="mt-2 -mb-1">Время отъезда</h3>
             <input
               value={checkOut}
               onChange={(ev) => setCheckOut(ev.target.value)}
@@ -160,7 +161,7 @@ const PlacesFormPage = () => {
             />
           </div>
           <div>
-            <h3 className="mt-2 -mb-1">Max number of guests</h3>
+            <h3 className="mt-2 -mb-1">Максимальное кол-во гостей</h3>
             <input
               value={maxGuests}
               onChange={(ev) => setMaxGuests(ev.target.value)}
@@ -171,7 +172,7 @@ const PlacesFormPage = () => {
         </div>
         <div className="my-4">
           <button className="w-[200px] hover:opacity-90 active:opacity-95  bg-primary rounded-2xl py-2 text-white font-bold ">
-            Save
+            Сохранить
           </button>
         </div>
       </form>

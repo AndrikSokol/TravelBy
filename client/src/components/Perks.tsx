@@ -1,11 +1,11 @@
-import React,{FC} from "react";
+import React, { FC } from "react";
 
-type PerksProps ={
- selected: string[]
- onChange: React.Dispatch<React.SetStateAction<string[]>>
-}
-const Perks:FC<PerksProps> = ({ selected, onChange })  => {
-  function handleCbClick(event:  React.ChangeEvent<HTMLInputElement>) {
+type PerksProps = {
+  selected: string[];
+  onChange: React.Dispatch<React.SetStateAction<string[]>>;
+};
+const Perks: FC<PerksProps> = ({ selected, onChange }) => {
+  function handleCbClick(event: React.ChangeEvent<HTMLInputElement>) {
     const { checked, name } = event.target;
     if (checked) {
       onChange([...selected, name]);
@@ -16,9 +16,9 @@ const Perks:FC<PerksProps> = ({ selected, onChange })  => {
 
   return (
     <>
-      <h2 className="text-2xl lg:text-3xl mt-4">Perks</h2>
+      <h2 className="text-2xl lg:text-3xl mt-4">Привилегии</h2>
       <p className="text-gray-500 text-sm">
-        select all the perks of your place
+        Выберете привилегии, которые имеются в данном месте
       </p>
       <div className="gap-2 mt-2 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7">
         <label className="MyLabel">
@@ -67,7 +67,7 @@ const Perks:FC<PerksProps> = ({ selected, onChange })  => {
             />
           </svg>
 
-          <span>Free parking spot</span>
+          <span>Бесплатная парковка</span>
         </label>
         <label className="MyLabel">
           <input
@@ -115,7 +115,7 @@ const Perks:FC<PerksProps> = ({ selected, onChange })  => {
             />
           </svg>
 
-          <span>Radio</span>
+          <span>Радио</span>
         </label>
         <label className="MyLabel">
           <input
@@ -139,7 +139,7 @@ const Perks:FC<PerksProps> = ({ selected, onChange })  => {
             />
           </svg>
 
-          <span>Pets</span>
+          <span>Животные</span>
         </label>
         <label className="MyLabel">
           <input
@@ -163,7 +163,7 @@ const Perks:FC<PerksProps> = ({ selected, onChange })  => {
             />
           </svg>
 
-          <span>private entrace</span>
+          <span>Приватная территория</span>
         </label>
       </div>
     </>
