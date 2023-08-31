@@ -4,22 +4,23 @@ import { useParams } from "react-router";
 import { MdPlace } from "react-icons/md";
 import { api } from "../services/api";
 import { IPlace } from "../types/place.interface";
+import { useGetPlaceQuery } from "../store/api/api";
 
 const PlacePage = () => {
-  const [place, setPlace] = React.useState<IPlace>({} as IPlace);
   const [showAllPhotos, setShowAllPhotos] = React.useState<boolean>(false);
-  const { id } = useParams();
-  React.useEffect(() => {
-    async function fetchPlace() {
-      try {
-        const place = await api.getPlace(id);
-        setPlace(place);
-      } catch (e) {
-        console.log(e.respose?.data?.message);
-      }
-    }
-    fetchPlace();
-  }, []);
+  const { id } = useParams<string>();
+  const { data: place, error, isLoading } = useGetPlaceQuery(id as string);
+  // React.useEffect(() => {
+  //   async function fetchPlace() {
+  //     try {
+  //       const place = await api.getPlace(id);
+  //       setPlace(place);
+  //     } catch (e) {
+  //       console.log(e.respose?.data?.message);
+  //     }
+  //   }
+  //   fetchPlace();
+  // }, []);
 
   if (showAllPhotos) {
     return (
