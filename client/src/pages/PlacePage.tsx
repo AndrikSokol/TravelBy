@@ -5,11 +5,13 @@ import { MdPlace } from "react-icons/md";
 import { api } from "../services/api";
 import { IPlace } from "../types/place.interface";
 import { useGetPlaceQuery } from "../store/api/api";
+import MyLoader from "../components/MyLoader";
 
 const PlacePage = () => {
   const [showAllPhotos, setShowAllPhotos] = React.useState<boolean>(false);
   const { id } = useParams<string>();
   const { data: place, error, isLoading } = useGetPlaceQuery(id as string);
+
   // React.useEffect(() => {
   //   async function fetchPlace() {
   //     try {
@@ -53,11 +55,7 @@ const PlacePage = () => {
           {place?.photos?.length > 0 &&
             place.photos.map((photo) => (
               <div className="w-full flex justify-center">
-                <img
-                  className="rounded-sm"
-                  src={`http://localhost:4500/uploads/` + photo}
-                  alt=""
-                />
+                <img className="rounded-sm" src={`http://localhost:4500/uploads/` + photo} alt="" />
               </div>
             ))}
         </div>
