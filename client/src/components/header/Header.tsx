@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
 import { IUser, IUserContext } from "../../types/user.interface";
 import travel from "../../assets/travel.png";
@@ -7,9 +7,10 @@ import { useAppSelector } from "../../hooks/redux";
 
 const Header = () => {
   const { setAuth, user } = useAppSelector((state) => state.user);
-  console.log("header", setAuth, user);
+  const { pathname } = useLocation();
+  let subpage: string | undefined = pathname.split("/")?.[2];
   return (
-    <header className="w-full  border-b p-4">
+    <header className={`w-full  border-b p-4 ${subpage === "login" ? "relative opacity-5" : " "}`}>
       <div className="sm:w-[85%] mx-auto flex gap-2 justify-between  w-full">
         <Link to={"/"} className="flex items-center gap-1">
           <div className="flex">

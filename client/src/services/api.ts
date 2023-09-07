@@ -1,7 +1,7 @@
 import axios from "axios";
 import { BASEURL } from "../constants/constants";
 import { IPlace, IPlaceData } from "../types/place.interface";
-import { IUser, IUserData } from "../types/user.interface";
+import { IGoogleUserData, IUser, IUserData } from "../types/user.interface";
 
 export const instance = axios.create({
   baseURL: BASEURL,
@@ -22,7 +22,9 @@ instance.interceptors.response.use(
     if (error.response.status === 401 && !error.config._isRetry) {
       try {
         originalRequest._isRetry = true;
-        const { data } = await axios.get<IUserData>(`${BASEURL}/refresh`, { withCredentials: true });
+        const { data } = await axios.get<IUserData>(`${BASEURL}/refresh`, {
+          withCredentials: true,
+        });
         localStorage.setItem("token", data.accessToken);
         return instance.request(originalRequest);
       } catch (error) {
@@ -47,6 +49,10 @@ export const api = {
     return data;
   },
 
+  googleLogin: async (): Promise<IGoogleUserData> => {
+    const { data } = await instance.get<IGoogleUserData>("/login/success");
+    return data;
+  },
   registration: async (username: string, email: string, password: string): Promise<IUserData> => {
     const { data } = await instance.post<IUserData>("/registration", {
       username,

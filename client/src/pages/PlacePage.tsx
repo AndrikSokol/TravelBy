@@ -66,10 +66,10 @@ const PlacePage = () => {
   return (
     <div className="w-[85%] lg:max-w-[70%] mx-auto my-4">
       {place !== undefined && (
-        <div className="  ">
+        <div className="max-w-[70%] mx-auto ">
           <div className="flex flex-col">
             <div className="text-xl font-bold">{place.title}</div>
-            <div className="flex justify-between  gap-4 py-2">
+            <div className=" flex justify-between  gap-4 py-2">
               <a
                 target="_blank"
                 href={`https://maps.google.com/?q=` + place.address}
@@ -120,7 +120,7 @@ const PlacePage = () => {
               className={
                 place.photos?.length < 2
                   ? "justify-center"
-                  : "grid grid-cols-[75%_25%]  justify-center gap-2"
+                  : "grid grid-cols-[75%_25%]  justify-center gap-[2px]"
               }
             >
               <div
@@ -132,7 +132,7 @@ const PlacePage = () => {
               >
                 {place.photos?.[0] && (
                   <img
-                    className="object-cover w-full h-full "
+                    className="object-cover w-full h-full  "
                     src={"http://localhost:4500/uploads/" + place.photos[0]}
                     alt=""
                   />
@@ -182,22 +182,9 @@ const PlacePage = () => {
           </div>
         </div>
       )}
-      <div className="py-2">
+      <div className="max-w-[70%] mx-auto py-2">
         <h2 className="font-semibold text-2xl">Описание</h2>
         <p className="sm:text-lg text-justify">{place?.description}</p>
-      </div>
-      <div className="grid grid-cols-2 ">
-        <div className="sm:text-xl">
-          Время регистрации: {place?.checkIn} <br />
-          Выезд: {place?.checkOut} <br />
-          Максимальное кол-во людей: {place?.maxGuests} <br />
-        </div>
-        {/* <div className="sm:w-[250px] overflow-hidden shadow sm:text-xl gap-1 bg-gray-300 flex flex-col items-center justify-center rounded-2xl">
-          <div>Price: {place?.price}$ / per night</div>
-          <button className="bg-primary p-1 text-white rounded-2xl w-full">
-            Book this place
-          </button>
-        </div> */}
       </div>
     </div>
   );

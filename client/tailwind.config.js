@@ -6,6 +6,9 @@ export default {
       colors: {
         primary: "#F5385D",
       },
+      backgroundImage: {
+        nature: "url('./assets/nature.jpg')",
+      },
     },
   },
   plugins: [],

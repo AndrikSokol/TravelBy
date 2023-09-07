@@ -2,14 +2,15 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
-
+const passportConfig = require("./config/passport-config");
+const session = require("express-session");
 require("dotenv").config();
 const app = express();
-
+const passport = require("passport");
 const router = require("./router/index.js");
 const errorMiddleware = require("./middlewares/errorMiddleware.js");
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT;
 
 app.use(express.json());
 app.use(cookieParser());
@@ -20,6 +21,17 @@ app.use(
     origin: process.env.API_URL,
   })
 );
+app.use(
+  session({
+    secret: "hahaha",
+    resave: true,
+    saveUninitialized: true,
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(router);
 app.use(errorMiddleware);
 

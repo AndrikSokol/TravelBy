@@ -15,3 +15,15 @@ export interface IUserData {
   accessToken: string;
   refreshToken: string;
 }
+
+export interface IGoogleUser {
+  googleId: string;
+  username: string;
+  email: string;
+}
+
+export interface IGoogleUserData {
+  googleUser: IGoogleUser;
+  accessToken: string;
+  refreshToken: string;
+}

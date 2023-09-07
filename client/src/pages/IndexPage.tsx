@@ -6,10 +6,20 @@ import { fetchPlaces } from "../slices/placesSlice";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import MyLoader from "../components/MyLoader";
 import { BASEURL } from "../constants/constants";
+import { addUser } from "../slices/userSlice";
 const IndexPage = () => {
   const dispatch = useAppDispatch();
+  const { user } = useAppSelector((state) => state.user);
   React.useEffect(() => {
     dispatch(fetchPlaces());
+
+    const fetchUser = async () => {
+      if (user) return;
+      const userData = await api.googleLogin();
+      localStorage.setItem("token", userData.accessToken);
+      dispatch(addUser(userData.googleUser));
+    };
+    fetchUser();
   }, []);
 
   const { isLoading, places, error } = useAppSelector((state) => state.place);
