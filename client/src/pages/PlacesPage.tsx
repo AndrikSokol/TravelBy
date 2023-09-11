@@ -14,9 +14,7 @@ import style from "../assets/css/profilePage.module.scss";
 
 const PlacesPage = () => {
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
-  const [currentPlace, setCurrentPlace] = React.useState<IPlaceData>(
-    {} as IPlaceData
-  );
+  const [currentPlace, setCurrentPlace] = React.useState<IPlaceData>({} as IPlaceData);
   const dispatch = useAppDispatch();
 
   React.useEffect(() => {
@@ -51,9 +49,7 @@ const PlacesPage = () => {
     }
   }
 
-  const { placesForUser, isLoading, error } = useAppSelector(
-    (state) => state.place
-  );
+  const { placesForUser, isLoading, error } = useAppSelector((state) => state.place);
 
   if (error) {
     return (
@@ -73,9 +69,7 @@ const PlacesPage = () => {
           <Dialog.Title className="text-black w-full text-center text-xl">
             Удаление Отзыва
           </Dialog.Title>
-          <Dialog.Description>
-            Вы действительно хотите удалить отзыв?
-          </Dialog.Description>
+          <Dialog.Description>Вы действительно хотите удалить отзыв?</Dialog.Description>
 
           <button
             onClick={removePlace}
@@ -87,7 +81,7 @@ const PlacesPage = () => {
       </Dialog>
 
       <AccountNav />
-      <div className="w-full lg:w-[80%] mx-auto">
+      <div className="w-full lg:w-[80%] mx-auto mb-10">
         {placesForUser !== undefined && (
           <div>
             <div className="text-center font-bold  text-lg lg:text-xl">
@@ -113,7 +107,7 @@ const PlacesPage = () => {
                     className="sm:flex  sm:gap-4 sm:justify-between shadow-lg border-t-2 border-t-rose-200  my-5 items-center rounded-lg"
                     key={place._id}
                   >
-                    <div className="sm:flex gap-4 ">
+                    <div className="p-2 sm:p-0 sm:flex gap-4 ">
                       {place.photos.length > 0 && (
                         <div className=" flex w-full sm:w-auto shrink-0 grow justify-center sm:justify-start">
                           <img
@@ -125,9 +119,7 @@ const PlacesPage = () => {
                       )}
 
                       <div className="p-3 text-justify grow-0 shrink">
-                        <div className=" text-lg lg:text-xl lg:font-bold">
-                          {place.title}
-                        </div>
+                        <div className=" text-lg lg:text-xl lg:font-bold">{place.title}</div>
                         <p>{place.description}</p>
                       </div>
                     </div>
@@ -164,11 +156,7 @@ const PlacesPage = () => {
             stroke="currentColor"
             className="w-6 h-6"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 6v12m6-6H6"
-            />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m6-6H6" />
           </svg>
           Добавить новое место
         </Link>

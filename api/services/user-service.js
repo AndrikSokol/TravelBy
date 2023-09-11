@@ -10,7 +10,7 @@ class UserService {
   async login(email, password) {
     const user = await User.findOne({ email });
     if (!user) {
-      ApiError.BadRequest("Не найден пользователь");
+      throw ApiError.BadRequest("Неверные данные", ["email"]);
     }
     const passOk = bcrypt.compareSync(password, user.password);
     if (!passOk) {

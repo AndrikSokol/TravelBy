@@ -7,28 +7,28 @@ import { IUserContext } from "../types/user.interface";
 import { useAppDispatch } from "../hooks/redux";
 import { addUser } from "../slices/userSlice";
 import nature from "../assets/nature.jpg";
+
 const LoginPage = () => {
   const [email, setEmail] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
   const [redirect, setRedirect] = React.useState<boolean>(false);
-  // const { setUser } = React.useContext<IUserContext>(UserContext);
+  const emailInputRef = React.useRef();
   const dispatch = useAppDispatch();
   const [isShow, setIsShow] = React.useState<boolean>(false);
-  const titleRef = React.useRef<HTMLHeadingElement>();
+  const [isInvalidData, setIsInvalidData] = React.useState<boolean>(false);
   async function handleLoginSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     try {
       const userData = await api.login(email, password);
       localStorage.setItem("token", userData.accessToken);
       dispatch(addUser(userData.user));
-      // setUser(userData.user);
       setRedirect(true);
     } catch (e) {
-      console.log(e.respose?.data?.message);
+      if (e.request.status === 400) {
+        setIsInvalidData(true);
+      }
     }
   }
-
-  const showTitle = () => {};
 
   React.useEffect(() => {
     setIsShow(true);
@@ -49,8 +49,6 @@ const LoginPage = () => {
         } shadow-lg p-4  rounded-md `}
       >
         <h1
-          ref={titleRef}
-          onClick={showTitle}
           className={` ${
             isShow ? "opacity-100 ease-in-out  delay-300 duration-200" : "opacity-0"
           } text-4xl text-center pb-4 font-medium`}
@@ -62,10 +60,15 @@ const LoginPage = () => {
             <button
               onClick={googleAuth}
               className={`${
-                isShow ? "translate-x-0 ease-in-out opacity-100" : " translate-x-[-300px] opacity-0"
-              }   active:opacity-95 w-64  delay-300 duration-500 bg-red-500 rounded-md py-2 text-white font-bold`}
+                isShow ? " translate-x-0  opacity-100" : " translate-x-[-300px] opacity-0"
+              }  ease-in-out px-2 flex items-center gap-2  bg-slate-300 active:opacity-90  bg-opacity-80 w-64  delay-300 duration-500  rounded-md py-2  font-bold`}
             >
-              Google
+              <img
+                src="/icons/login/google.png"
+                className="w-6 h-6"
+                alt="Google Sign In image"
+              ></img>{" "}
+              Sign in with Google
             </button>
           </div>
           <form
@@ -74,7 +77,11 @@ const LoginPage = () => {
             } mx-auto  delay-100 duration-200`}
             onSubmit={handleLoginSubmit}
           >
-            <div className="flex border rounded-2xl my-4 py-3 px-2 gap-2">
+            <div
+              className={`flex border rounded-2xl my-4 py-3 px-2 gap-2 ${
+                isInvalidData ? "border-red-500 border-2 " : ""
+              }`}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -89,14 +96,18 @@ const LoginPage = () => {
                 />
               </svg>
               <input
-                className="bg-white bg-opacity-0"
+                className="bg-white bg-opacity-0 placeholder-gray-700"
                 type="email"
                 placeholder="youremail@gmail.com"
                 value={email}
                 onChange={(ev) => setEmail(ev.target.value)}
               />
             </div>
-            <div className="flex border rounded-2xl my-2 py-3 px-2 gap-2">
+            <div
+              className={`flex border rounded-2xl my-4 py-3 px-2 gap-2 ${
+                isInvalidData ? "border-red-500 border-2 " : ""
+              }`}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -112,17 +123,19 @@ const LoginPage = () => {
                 />
               </svg>
               <input
-                className="bg-white bg-opacity-0"
+                className="bg-white bg-opacity-0 placeholder-gray-700"
                 type="password"
                 placeholder="password"
                 value={password}
                 onChange={(ev) => setPassword(ev.target.value)}
               />
             </div>
+
             <button className="hover:opacity-90 active:opacity-95 w-full bg-primary rounded-2xl py-2 text-white font-bold ">
               Войти
             </button>
-            <div className="text-center py-2 text-gray-500">
+
+            <div className="text-center py-2   text-gray-800 ">
               Не имеете аккаунта?{" "}
               <Link to={"/registration"} className="text-black underline active:text-gray-700">
                 Зарегистрируйтесь

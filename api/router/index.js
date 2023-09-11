@@ -46,11 +46,7 @@ router.post(
 //     }
 //   )
 // );
-router.get(
-  "/auth/google",
-  passport.authenticate("google", { scope: ["profile", "email"] }),
-  async (req, res) => {}
-);
+router.get("/auth/google", passport.authenticate("google", { scope: ["profile", "email"] }));
 
 // Callback route where Google redirects after successful authentication
 router.get(

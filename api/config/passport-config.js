@@ -9,9 +9,8 @@ passport.use(
       clientID: "422703098795-qof71930mtk1rj7otmjboipkc64a28g1.apps.googleusercontent.com",
       clientSecret: "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",
       callbackURL: "/auth/google/callback",
-      passReqToCallback: true,
     },
-    async (request, accessToken, refreshToken, profile, done) => {
+    async (accessToken, refreshToken, profile, done) => {
       let userJson = profile._json;
       let googleUser = await GoogleUser.findOne({ googleId: userJson.sub });
       const tokens = TokenService.generateTokens({ accessToken });
