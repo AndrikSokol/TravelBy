@@ -9,6 +9,7 @@ const router = new Router();
 const passport = require("passport");
 const { body } = require("express-validator");
 require("dotenv").config();
+const qr = require("qr-image");
 
 router.post(
   "/registration",
@@ -72,6 +73,26 @@ router.get("/login/success", (req, res, next) => {
   } catch (error) {
     next(error);
   }
+});
+
+router.get("/qr", (req, res) => {
+  const googleAuthURL = `https://accounts.google.com/o/oauth2/auth?client_id=422703098795-qof71930mtk1rj7otmjboipkc64a28g1.apps.googleusercontent.com&redirect_uri=http://localhost:4500/auth/google/callback&scope=profile+email&response_type=code`;
+
+  const code = qr.image(googleAuthURL, { type: "png" });
+
+  const chunks = [];
+  code.on("data", (chunk) => {
+    chunks.push(chunk);
+  });
+
+  code.on("end", () => {
+    const qrCodeImage = Buffer.concat(chunks);
+    const base64QRCode = qrCodeImage.toString("base64");
+    const dataUri = `data:image/png;base64,${base64QRCode}`;
+
+    // Send the base64-encoded image as data URI in the response
+    res.send(dataUri);
+  });
 });
 
 module.exports = router;

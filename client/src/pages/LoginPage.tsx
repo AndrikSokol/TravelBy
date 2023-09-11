@@ -13,6 +13,7 @@ const LoginPage = () => {
   const [password, setPassword] = React.useState<string>("");
   const [redirect, setRedirect] = React.useState<boolean>(false);
   const emailInputRef = React.useRef();
+  const [qrCodeURL, setQrCodeURL] = React.useState<string>();
   const dispatch = useAppDispatch();
   const [isShow, setIsShow] = React.useState<boolean>(false);
   const [isInvalidData, setIsInvalidData] = React.useState<boolean>(false);
@@ -32,6 +33,22 @@ const LoginPage = () => {
 
   React.useEffect(() => {
     setIsShow(true);
+    async function fetchQRcode() {
+      try {
+        const qrCodeImgResponse = await api.getQrCodeForSignIn();
+        setQrCodeURL(qrCodeImgResponse);
+        // if (qrCodeImgResponse instanceof Blob) {
+        //   // Check if the response is a Blob (or a File)
+        //   // const qrCodeURL = URL.createObjectURL(qrCodeImgResponse);
+        //   setQrCodeURL(qrCodeURL);
+        // } else {
+        //   console.error("QR code response is not a Blob:", qrCodeImgResponse);
+        // }
+      } catch (error) {
+        console.error("Error fetching QR code:", error);
+      }
+    }
+    fetchQRcode();
   }, []);
   const googleAuth = () => {
     window.open("http://localhost:4500/auth/google ", "_self");
@@ -56,7 +73,7 @@ const LoginPage = () => {
           Вход
         </h1>
         <div className="grid grid-cols-2 gap-3 overflow-hidden">
-          <div className="border-red-100 border-r-2 pr-2 flex  items-start  overflow-hidden">
+          <div className="border-red-100 border-r-2 pr-2 flex flex-col  items-center    overflow-hidden">
             <button
               onClick={googleAuth}
               className={`${
@@ -70,6 +87,7 @@ const LoginPage = () => {
               ></img>{" "}
               Sign in with Google
             </button>
+            <img src={qrCodeURL} className="  w-48" alt="google qr-code" />
           </div>
           <form
             className={`${

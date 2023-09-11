@@ -80,6 +80,10 @@ export const api = {
     return data;
   },
 
+  getQrCodeForSignIn: async () => {
+    const { data } = await instance.get("/qr");
+    return data;
+  },
   // getProfile: async () => {
   //   const { data } = await instance.get("/profile");
   //   return data;
