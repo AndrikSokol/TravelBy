@@ -3,6 +3,8 @@ const passport = require("passport");
 const GoogleUser = require("../models/GoogleUser");
 const TokenService = require("../services/token-service");
 require("dotenv").config();
+const speakeasy = require("speakeasy");
+
 passport.use(
   new GoogleStrategy(
     {
@@ -15,14 +17,16 @@ passport.use(
       let googleUser = await GoogleUser.findOne({ googleId: userJson.sub });
       const tokens = TokenService.generateTokens({ accessToken });
       TokenService.saveToken(userJson.googleId, tokens.refreshToken);
+      const secret = speakeasy.generateSecret({ length: 10 });
       if (googleUser) return done(null, { googleUser, ...tokens });
       googleUser = new GoogleUser({
         googleId: userJson.sub,
         email: userJson.email,
         username: userJson.name,
+        secretKey: secret,
       });
       await googleUser.save();
-
+      delete googleUser.secretKey;
       return done(null, { googleUser, ...tokens });
     }
   )

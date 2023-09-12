@@ -80,8 +80,8 @@ export const api = {
     return data;
   },
 
-  getQrCodeForSignIn: async () => {
-    const { data } = await instance.get("/qr");
+  getQrCodeForSignIn: async (email: string) => {
+    const { data } = await instance.get(`/getQrCode/${email}`);
     return data;
   },
   // getProfile: async () => {
@@ -104,6 +104,10 @@ export const api = {
     return data;
   },
 
+  verify2fa: async (code: string, email: string) => {
+    const isValid = await instance.get(`/verify2fa/${code}&${email}`);
+    return isValid;
+  },
   addPlace: async (placeData: IPlace) => {
     await instance.post("/place", {
       ...placeData,

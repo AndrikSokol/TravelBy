@@ -23,7 +23,8 @@ const LoginPage = () => {
       const userData = await api.login(email, password);
       localStorage.setItem("token", userData.accessToken);
       dispatch(addUser(userData.user));
-      setRedirect(true);
+      fetchQRcode(email);
+      // setRedirect(true);
     } catch (e) {
       if (e.request.status === 400) {
         setIsInvalidData(true);
@@ -31,24 +32,33 @@ const LoginPage = () => {
     }
   }
 
+  async function fetchQRcode(email: string) {
+    try {
+      const qrCodeImgResponse = await api.getQrCodeForSignIn(email);
+      setQrCodeURL(qrCodeImgResponse);
+    } catch (error) {
+      console.error("Error fetching QR code:", error);
+    }
+  }
+
   React.useEffect(() => {
     setIsShow(true);
-    async function fetchQRcode() {
-      try {
-        const qrCodeImgResponse = await api.getQrCodeForSignIn();
-        setQrCodeURL(qrCodeImgResponse);
-        // if (qrCodeImgResponse instanceof Blob) {
-        //   // Check if the response is a Blob (or a File)
-        //   // const qrCodeURL = URL.createObjectURL(qrCodeImgResponse);
-        //   setQrCodeURL(qrCodeURL);
-        // } else {
-        //   console.error("QR code response is not a Blob:", qrCodeImgResponse);
-        // }
-      } catch (error) {
-        console.error("Error fetching QR code:", error);
-      }
-    }
-    fetchQRcode();
+    // async function fetchQRcode() {
+    //   try {
+    //     const qrCodeImgResponse = await api.getQrCodeForSignIn();
+    //     setQrCodeURL(qrCodeImgResponse);
+    //     // if (qrCodeImgResponse instanceof Blob) {
+    //     //   // Check if the response is a Blob (or a File)
+    //     //   // const qrCodeURL = URL.createObjectURL(qrCodeImgResponse);
+    //     //   setQrCodeURL(qrCodeURL);
+    //     // } else {
+    //     //   console.error("QR code response is not a Blob:", qrCodeImgResponse);
+    //     // }
+    //   } catch (error) {
+    //     console.error("Error fetching QR code:", error);
+    //   }
+    // }
+    // fetchQRcode();
   }, []);
   const googleAuth = () => {
     window.open("http://localhost:4500/auth/google ", "_self");
@@ -56,6 +66,12 @@ const LoginPage = () => {
   if (redirect) {
     return <Navigate to={"/"} />;
   }
+
+  const verifyCode = async (code) => {
+    const { data: isValid } = await api.verify2fa(code, email);
+    console.log(isValid, "valid");
+    isValid ? setRedirect(true) : console.log("error");
+  };
   // items-center justify-around
   // bg-nature bg-cover
   return (
@@ -87,7 +103,12 @@ const LoginPage = () => {
               ></img>{" "}
               Sign in with Google
             </button>
-            <img src={qrCodeURL} className="  w-48" alt="google qr-code" />
+            {qrCodeURL && (
+              <>
+                <img src={qrCodeURL} className="  w-48" alt="google qr-code" />
+                <input placeholder="verify" onChange={(e) => verifyCode(e.target.value)}></input>
+              </>
+            )}
           </div>
           <form
             className={`${

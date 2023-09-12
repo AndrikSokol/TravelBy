@@ -9,8 +9,10 @@ const router = new Router();
 const passport = require("passport");
 const { body } = require("express-validator");
 require("dotenv").config();
-const qr = require("qr-image");
-
+// const qr = require("qr-image");
+const qrcode = require("qrcode");
+const userService = require("../services/user-service");
+const speakeasy = require("speakeasy");
 router.post(
   "/registration",
   body("email").isEmail(),
@@ -75,24 +77,52 @@ router.get("/login/success", (req, res, next) => {
   }
 });
 
-router.get("/qr", (req, res) => {
-  const googleAuthURL = `https://accounts.google.com/o/oauth2/auth?client_id=422703098795-qof71930mtk1rj7otmjboipkc64a28g1.apps.googleusercontent.com&redirect_uri=http://localhost:4500/auth/google/callback&scope=profile+email&response_type=code`;
+// const isValid = speakeasy.totp.verify({
+//         secret: secret.value,
+//         encoding: 'base32',
+//         token: ${token},
+//       });
+// router.get("/qr", (req, res) => {
+//   const googleAuthURL = `https://accounts.google.com/o/oauth2/auth?client_id=422703098795-qof71930mtk1rj7otmjboipkc64a28g1.apps.googleusercontent.com&redirect_uri=http://localhost:4500/auth/google/callback&scope=profile+email&response_type=code`;
 
-  const code = qr.image(googleAuthURL, { type: "png" });
+//   const code = qr.image(googleAuthURL, { type: "png" });
 
-  const chunks = [];
-  code.on("data", (chunk) => {
-    chunks.push(chunk);
+//   const chunks = [];
+//   code.on("data", (chunk) => {
+//     chunks.push(chunk);
+//   });
+
+//   code.on("end", () => {
+//     const qrCodeImage = Buffer.concat(chunks);
+//     const base64QRCode = qrCodeImage.toString("base64");
+//     const dataUri = `data:image/png;base64,${base64QRCode}`;
+
+//     // Send the base64-encoded image as data URI in the response
+//     res.send(dataUri);
+//   });
+// });
+
+router.get("/getQrCode/:email", async (req, res) => {
+  email = req.params.email;
+  const secret = await userService.findSecret(email);
+  qrcode.toDataURL(`${secret.otpauth_url}`, (err, data) => {
+    res.json(data);
   });
+});
 
-  code.on("end", () => {
-    const qrCodeImage = Buffer.concat(chunks);
-    const base64QRCode = qrCodeImage.toString("base64");
-    const dataUri = `data:image/png;base64,${base64QRCode}`;
+router.get("/verify2fa/:code&:email", async (req, res) => {
+  console.log(req.params);
+  const code = req.params.code;
+  const email = req.params.email;
 
-    // Send the base64-encoded image as data URI in the response
-    res.send(dataUri);
+  const secret = await userService.findSecret(email);
+  console.log(secret.value);
+  const isValid = speakeasy.totp.verify({
+    secret: secret.base32,
+    encoding: "base32",
+    token: code,
   });
+  return res.json(isValid);
 });
 
 module.exports = router;

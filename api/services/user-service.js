@@ -5,7 +5,7 @@ const tokenService = require("./token-service");
 const UserDto = require("../dtos/UserDto");
 const ApiError = require("../exceptions/api-error");
 const bcryptSalt = bcrypt.genSaltSync(10);
-
+const speakeasy = require("speakeasy");
 class UserService {
   async login(email, password) {
     const user = await User.findOne({ email });
@@ -26,6 +26,7 @@ class UserService {
   }
 
   async registration(username, email, password) {
+    const secret = speakeasy.generateSecret({ length: 10 });
     const candidate = await User.findOne({ email });
     if (candidate) {
       throw ApiError.BadRequest("Пользователь уже существует");
@@ -34,6 +35,7 @@ class UserService {
       username,
       email,
       password: bcrypt.hashSync(password, bcryptSalt),
+      secretKey: secret,
     });
     const userDto = new UserDto(user);
     const tokens = tokenService.generateTokens({ ...userDto });
@@ -67,7 +69,12 @@ class UserService {
       user: userDto,
     };
   }
-
+  async findSecret(email) {
+    console.log(email);
+    const user = await User.findOne({ email });
+    console.log(user);
+    return user.secretKey;
+  }
   // async profile(token) {
   //   if (token) {
   //     jwt.verify(token, process.env.JWT_SECRET, {}, async (err, userData) => {
