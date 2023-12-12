@@ -8,11 +8,14 @@ const bcryptSalt = bcrypt.genSaltSync(10);
 
 class UserService {
   async login(email, password) {
+    console.log(password)
     const user = await User.findOne({ email });
+    console.log(user);
     if (!user) {
       ApiError.BadRequest("Не найден пользователь");
     }
     const passOk = bcrypt.compareSync(password, user.password);
+    console.log(passOk);
     if (!passOk) {
       throw ApiError.UnauthorizedError("Не найден пользователь");
     }
