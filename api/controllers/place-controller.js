@@ -56,7 +56,18 @@ class PlaceController {
 
   async getPlaces(req, res, next) {
     try {
+      console.log("places");
       const places = await placeService.getPlaces();
+      res.json(places);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getFilterPlaces(req, res, next) {
+    try {
+      const keywordsFilter = req.params.keywordsFilter;
+      const places = await placeService.getFilterPlaces(keywordsFilter);
       res.json(places);
     } catch (error) {
       next(error);

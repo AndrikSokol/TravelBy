@@ -1,16 +1,40 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { UserContext } from "../../context/UserContext";
-import { IUser, IUserContext } from "../../types/user.interface";
 import travel from "../../assets/travel.png";
 import { useAppSelector } from "../../hooks/redux";
+import { useDispatch } from "react-redux";
+import { addFilter, clearFitler } from "../../slices/placesSlice";
 
 const Header = () => {
+  const dispath = useDispatch();
   const { setAuth, user } = useAppSelector((state) => state.user);
+  const [filter, setFilter] = useState<string>("");
   const { pathname } = useLocation();
+
   let subpage: string | undefined = pathname.split("/")?.[2];
+
+  const handleFilterButton = () => {
+    dispath(addFilter(filter));
+  };
+
+  const handleInput = (event) => {
+    if (event.key === "Enter" || event.keyCode === 13) {
+      dispath(addFilter(filter));
+    }
+  };
+
+  useEffect(() => {
+    if (subpage != undefined) {
+      dispath(clearFitler());
+    }
+  }, [subpage]);
+
   return (
-    <header className={`w-full  border-b p-4 ${subpage === "login" ? "relative opacity-5" : " "}`}>
+    <header
+      className={`w-full  border-b p-4 ${
+        subpage === "login" ? "relative opacity-5" : " "
+      }`}
+    >
       <div className="sm:w-[85%] mx-auto flex gap-2 justify-between  w-full">
         <Link to={"/"} className="flex items-center gap-1">
           <div className="flex">
@@ -18,9 +42,24 @@ const Header = () => {
             <span className="font-bold text-lg sm:text-xl">TravelBY</span>
           </div>
         </Link>
-        <div className=" flex gap-4 border border-gray-300 rounded-full py-2 px-4 shadow-md shadow-gray-300">
-          <input className="" type="text" placeholder="место..." />
-          <button className="bg-primary rounded-full text-white p-1">
+        <div
+          className={`flex gap-4 border border-gray-300 rounded-full py-2 px-4 shadow-md shadow-gray-300  ${
+            pathname == "/" ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          <input
+            className=""
+            value={filter}
+            type="text"
+            placeholder="место..."
+            onChange={(e) => setFilter(e.target.value)}
+            onKeyUp={handleInput}
+          />
+
+          <button
+            className="bg-primary rounded-full text-white p-1"
+            onClick={handleFilterButton}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

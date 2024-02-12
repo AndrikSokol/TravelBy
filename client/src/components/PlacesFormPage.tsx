@@ -135,7 +135,7 @@ const PlacesFormPage = () => {
           value={extraInfo}
           onChange={(ev) => setExtraInfo(ev.target.value)}
         ></textarea>
-        <h2 className="text-2xl mt-4">Время прибытия | Время выездаs</h2>
+        <h2 className="text-2xl mt-4">Время прибытия | Время выезда</h2>
         <p className="text-gray-500 text-sm">
           Добавьте время прибытия и время отъезда
         </p>

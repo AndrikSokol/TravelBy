@@ -1,29 +1,45 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect} from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { api } from "../services/api";
-import { fetchPlaces } from "../slices/placesSlice";
+import { clearFitler, fetchFilterPlaces, fetchPlaces } from "../slices/placesSlice";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import MyLoader from "../components/MyLoader";
 import { BASEURL } from "../constants/constants";
 import { addUser } from "../slices/userSlice";
+
 const IndexPage = () => {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.user);
-  React.useEffect(() => {
+  const  keywordsFilter  = useAppSelector((state)=> state.place.keywordsFilter)
+  useEffect(() => {
     dispatch(fetchPlaces());
 
-    const fetchUser = async () => {
-      if (user) return;
-      const userData = await api.googleLogin();
-      localStorage.setItem("token", userData.accessToken);
-      dispatch(addUser(userData.googleUser));
-    };
-    fetchUser();
+    // const fetchUser = async () => {
+    //   if (user) 
+    //   return;
+
+    //   const userData = await api.googleLogin();
+    //   localStorage.setItem("token", userData.accessToken);
+    //   dispatch(addUser(userData.googleUser));
+    // };
+    // fetchUser();
   }, []);
+
+  useEffect(()=>{
+    console.log("useEffect with keywordsfilter" +keywordsFilter)
+      console.log("done")
+      dispatch(fetchFilterPlaces(keywordsFilter))
+    // return ()=>{
+    //   console.log("clear");
+    //   dispatch(clearFitler())
+    // }
+  },[keywordsFilter])
 
   const { isLoading, places, error } = useAppSelector((state) => state.place);
 
+
+  
   if (isLoading) {
     return (
       <div className="sm:w-[85%] my-5 mx-auto grid  gap-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
@@ -48,6 +64,7 @@ const IndexPage = () => {
       </h1>
     );
   }
+
   return (
     <div className="sm:w-[85%] p-4 my-5 mx-auto gap-5 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
       {places.length > 0 &&
@@ -85,9 +102,6 @@ const IndexPage = () => {
               <div className="p-2">
                 <div className="text-xl font-bold">{place?.title}</div>
                 <div className="text-sm text-gray-500">{place?.address}</div>
-                {/* <div className="text-md">
-                  <span className="font-bold">{place?.price}</span>$ per night
-                </div> */}
               </div>
             </div>
           </Link>

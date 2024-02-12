@@ -41,6 +41,11 @@ export const api = {
     return data;
   },
 
+  getFilterPlaces: async (keywordsFilter:string): Promise<IPlaceData[]> => {
+    const { data } = await instance.get<IPlaceData[]>(`/places/${keywordsFilter}`);
+    return data;
+  },
+
   login: async (email: string, password: string): Promise<IUserData> => {
     const { data } = await instance.post<IUserData>("/login", {
       email,

@@ -1,5 +1,4 @@
 
-
 export interface IPlace{
     title:string,
     address:string,

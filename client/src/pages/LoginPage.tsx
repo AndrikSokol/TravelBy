@@ -17,16 +17,17 @@ const LoginPage = () => {
   const dispatch = useAppDispatch();
   const [isShow, setIsShow] = React.useState<boolean>(false);
   const [isInvalidData, setIsInvalidData] = React.useState<boolean>(false);
+
   async function handleLoginSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     try {
       const userData = await api.login(email, password);
       localStorage.setItem("token", userData.accessToken);
       dispatch(addUser(userData.user));
-      fetchQRcode(email);
-      // setRedirect(true);
+      //fetchQRcode(email);
+      setRedirect(true);
     } catch (e) {
-      if (e.request.status === 400) {
+      if (e.request.status === 400 || e.request.status === 401) {
         setIsInvalidData(true);
       }
     }
@@ -60,9 +61,11 @@ const LoginPage = () => {
     // }
     // fetchQRcode();
   }, []);
+
   const googleAuth = () => {
     window.open("http://localhost:4500/auth/google ", "_self");
   };
+
   if (redirect) {
     return <Navigate to={"/"} />;
   }
@@ -72,8 +75,7 @@ const LoginPage = () => {
     console.log(isValid, "valid");
     isValid ? setRedirect(true) : console.log("error");
   };
-  // items-center justify-around
-  // bg-nature bg-cover
+
   return (
     <div className="grow flex items-center  flex-row bg-nature bg-cover">
       <div
@@ -83,7 +85,9 @@ const LoginPage = () => {
       >
         <h1
           className={` ${
-            isShow ? "opacity-100 ease-in-out  delay-300 duration-200" : "opacity-0"
+            isShow
+              ? "opacity-100 ease-in-out  delay-300 duration-200"
+              : "opacity-0"
           } text-4xl text-center pb-4 font-medium`}
         >
           Вход
@@ -93,7 +97,9 @@ const LoginPage = () => {
             <button
               onClick={googleAuth}
               className={`${
-                isShow ? " translate-x-0  opacity-100" : " translate-x-[-300px] opacity-0"
+                isShow
+                  ? " translate-x-0  opacity-100"
+                  : " translate-x-[-300px] opacity-0"
               }  ease-in-out px-2 flex items-center gap-2  bg-slate-300 active:opacity-90  bg-opacity-80 w-64  delay-300 duration-500  rounded-md py-2  font-bold`}
             >
               <img
@@ -101,18 +107,23 @@ const LoginPage = () => {
                 className="w-6 h-6"
                 alt="Google Sign In image"
               ></img>{" "}
-              Sign in with Google
+              Войти с помощью Google
             </button>
             {qrCodeURL && (
               <>
                 <img src={qrCodeURL} className="  w-48" alt="google qr-code" />
-                <input placeholder="verify" onChange={(e) => verifyCode(e.target.value)}></input>
+                <input
+                  placeholder="verify"
+                  onChange={(e) => verifyCode(e.target.value)}
+                ></input>
               </>
             )}
           </div>
           <form
             className={`${
-              isShow ? "translate-x-0 ease-in-out opacity-100" : " translate-x-[300px] opacity-0"
+              isShow
+                ? "translate-x-0 ease-in-out opacity-100"
+                : " translate-x-[300px] opacity-0"
             } mx-auto  delay-100 duration-200`}
             onSubmit={handleLoginSubmit}
           >
@@ -176,14 +187,16 @@ const LoginPage = () => {
 
             <div className="text-center py-2   text-gray-800 ">
               Не имеете аккаунта?{" "}
-              <Link to={"/registration"} className="text-black underline active:text-gray-700">
+              <Link
+                to={"/registration"}
+                className="text-black underline active:text-gray-700"
+              >
                 Зарегистрируйтесь
               </Link>
             </div>
           </form>
         </div>
       </div>
-      {/* <img className=" object-cover" src={nature} alt="" /> */}
     </div>
   );
 };

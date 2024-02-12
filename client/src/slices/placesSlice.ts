@@ -5,13 +5,18 @@ import { IPlaceData } from "../types/place.interface";
 interface placesState {
   places: IPlaceData[];
   placesForUser: IPlaceData[];
+  favoritePlaces: IPlaceData[];
   isLoading: boolean;
+  keywordsFilter: string;
   error: string;
 }
+
 const initialState: placesState = {
   places: [],
   placesForUser: [],
+  favoritePlaces:[],
   isLoading: false,
+  keywordsFilter: "",
   error: "",
 };
 
@@ -23,6 +28,18 @@ export const fetchPlaces = createAsyncThunk("places", async (_, thunkAPI) => {
     return thunkAPI.rejectWithValue(error);
   }
 });
+
+export const fetchFilterPlaces = createAsyncThunk(
+  "places/:keywordsFilter",
+  async (keywordsFilter:string, thunkAPI) => {
+    try {
+      const data = await api.getFilterPlaces(keywordsFilter);
+      return data;
+    } catch (error) {
+      thunkAPI.rejectWithValue(error);
+    }
+  }
+);
 
 export const fetchPlacesForUser = createAsyncThunk(
   "placesForUser",
@@ -44,6 +61,10 @@ export const placesSlice = createSlice({
       state.placesForUser = action.payload;
     },
 
+    addFavoritePlace: (state, action) => {
+      state.favoritePlaces =  [...state.favoritePlaces ,action.payload];
+    },
+
     deletePlace: (state, action) => {
       state.placesForUser = state.placesForUser.filter(
         (place) => place._id !== action.payload
@@ -53,6 +74,14 @@ export const placesSlice = createSlice({
     deletePlacesForUser: (state) => {
       state.placesForUser = [];
     },
+
+    addFilter:(state,action) =>{
+      state.keywordsFilter = action.payload;
+    },
+
+    clearFitler:(state) =>{
+      state.keywordsFilter = "";
+    }
   },
   extraReducers: {
     [fetchPlaces.fulfilled.type]: (state, action) => {
@@ -78,9 +107,21 @@ export const placesSlice = createSlice({
       state.isLoading = false;
       state.error = action.error;
     },
+
+    [fetchFilterPlaces.fulfilled.type]: (state, action) => {
+      state.isLoading = false;
+      state.places = action.payload;
+    },
+    [fetchFilterPlaces.pending.type]: (state, action) => {
+      state.isLoading = true;
+    },
+    [fetchFilterPlaces.rejected.type]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.error;
+    },
   },
 });
 
-export const { addPlaces, deletePlace, deletePlacesForUser } =
+export const { addPlaces, deletePlace, deletePlacesForUser,addFilter ,clearFitler} =
   placesSlice.actions;
 export default placesSlice.reducer;

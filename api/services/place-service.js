@@ -14,6 +14,10 @@ class PlaceService {
     return await Place.findById(id);
   }
 
+  async getFilterPlaces( keywordsFilter ) {
+    return await Place.find({ title: { $regex: keywordsFilter, $options: 'i' } });
+  }
+
   async addPlace(id, place) {
     const { title, address, photos, description, perks, extraInfo, checkIn, checkOut, maxGuests } = place;
     const placeDoc = await Place.create({

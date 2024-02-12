@@ -19,12 +19,15 @@ router.post(
   body("password").isLength({ min: 3, max: 30 }),
   UserController.registration
 );
+
+
 router.post("/login", UserController.login);
 router.post("/logout", UserController.logout);
 router.get("/refresh", UserController.refresh);
 router.get("/profile", authMiddleware, UserController.profile);
 router.get("/places-for-user", authMiddleware, PlaceController.findUserPlaces);
 router.get("/place/:id", PlaceController.getPlace);
+router.get("/places/:keywordsFilter", PlaceController.getFilterPlaces);
 router.post("/place", authMiddleware, PlaceController.addPlace);
 router.put("/place", authMiddleware, PlaceController.removePlace);
 router.put("/places", authMiddleware, PlaceController.editPlace);
@@ -36,6 +39,7 @@ router.post(
   photosMiddleware.array("photos", 100),
   ImageController.uploadByDevice
 );
+
 // router.get("/auth/google", passportMiddleware({ scope: ["profile", "email"] }), (req, res) => {
 //   // Your route logic goes here
 // });
